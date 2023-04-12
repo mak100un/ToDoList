@@ -21,6 +21,7 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidLinkSkip>ToDoList.Core</AndroidLinkSkip>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -76,7 +77,14 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
+    <PackageReference Include="AutoMapper">
+      <Version>10.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="LiteDB">
+      <Version>5.0.16</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
       <Version>5.0.0</Version>
     </PackageReference>
@@ -86,14 +94,26 @@
     <PackageReference Include="MvvmCross.DroidX.Material">
       <Version>8.0.2</Version>
     </PackageReference>
+    <PackageReference Include="ReactiveUI">
+      <Version>18.4.26</Version>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI.Fody">
+      <Version>18.4.26</Version>
+    </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging">
       <Version>3.0.1</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.Xamarin">
       <Version>0.2.0.64</Version>
     </PackageReference>
+    <PackageReference Include="Swordfish.NET.CollectionsV3">
+      <Version>3.3.12</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
       <Version>2.1.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>1.7.5</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
