@@ -10,6 +10,7 @@
     <PackageReference Include="LiteDB" Version="5.0.16" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="MvvmCross" Version="8.0.2" />
+    <PackageReference Include="MvvmCross.Plugin.Visibility" Version="8.0.2" />
     <PackageReference Include="ReactiveUI" Version="18.4.26" />
     <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
     <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.12" />

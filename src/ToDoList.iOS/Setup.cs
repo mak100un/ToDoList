@@ -1,13 +1,27 @@
 using Microsoft.Extensions.Logging;
+using MvvmCross.IoC;
 using MvvmCross.Platforms.Ios.Core;
-using ToDoList.Core;
 using Serilog;
 using Serilog.Extensions.Logging;
+using ToDoList.Core;
+using ToDoList.Core.Services.Interfaces;
+using ToDoList.iOS.Services;
 
 namespace ToDoList.iOS
 {
     public class Setup : MvxIosSetup<App>
     {
+        protected override void InitializeFirstChance(IMvxIoCProvider iocProvider)
+        {
+            base.InitializeFirstChance(iocProvider);
+            iocProvider.LazyConstructAndRegisterSingleton<IDialogService, DialogService>();
+        }
+
+        protected override IMvxIocOptions CreateIocOptions() => new MvxIocOptions
+        {
+            PropertyInjectorOptions = MvxPropertyInjectorOptions.MvxInject
+        };
+
         protected override ILoggerProvider CreateLogProvider() => new SerilogLoggerProvider();
 
         protected override ILoggerFactory CreateLogFactory()
