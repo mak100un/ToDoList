@@ -144,4 +144,10 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
 
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
+
+    public override void LayoutSubviews()
+    {
+        base.LayoutSubviews();
+        this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+    }
 }

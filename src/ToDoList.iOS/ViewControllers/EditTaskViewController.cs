@@ -17,7 +17,7 @@ using UIKit;
 namespace ToDoList.iOS.ViewControllers;
 
 [MvxChildPresentation]
-public class EditTaskViewController : BaseViewController<EditTaskViewModel>
+public class EditTaskViewController : BaseToolbarViewController<EditTaskViewModel>
 {
     private UIStackView _titleStack;
     private UITextField _titleField;
@@ -34,6 +34,8 @@ public class EditTaskViewController : BaseViewController<EditTaskViewModel>
     private UIButton _actionButton;
     private UIView _contentView;
     private bool _moreThan11;
+
+    public override string Image => "Delete";
 
     public override void ViewWillAppear(bool animated)
     {

@@ -43,7 +43,6 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
     [Reactive]
     [Observe]
     [StringLength(1000, ErrorMessage = "\"Title\" length must be less than {1} characters")]
-    [RegularExpression("[a-zA-Z]*")]
     public string Description { get; set; }
 
     [AnyObserveChanged(ErrorMessage = "Any values should be changed.")]

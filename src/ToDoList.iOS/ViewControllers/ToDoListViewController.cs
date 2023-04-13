@@ -17,7 +17,7 @@ using UIKit;
 namespace ToDoList.iOS.ViewControllers
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
-    public class ToDoListViewController : BaseViewController<ToDoListViewModel>
+    public class ToDoListViewController : BaseToolbarViewController<ToDoListViewModel>
     {
         private readonly IReadOnlyDictionary<string, Type> _itemTypesToCellsMapper = new Dictionary<string, Type>
         {
@@ -30,6 +30,8 @@ namespace ToDoList.iOS.ViewControllers
         private StateContainer _stateContainer;
         private UIView _emptyView;
         private UIStackView _emptyStackView;
+
+        public override string Image => "Add";
 
         protected override void CreateView()
         {
@@ -106,7 +108,7 @@ namespace ToDoList.iOS.ViewControllers
             set
                 .Bind(_newTaskButton)
                 .For(v => v.BindTouchUpInside())
-                .To(vm => vm.NewTaskCommand);
+                .To(vm => vm.ToolbarCommand);
 
             set
                 .Bind(_stateContainer)

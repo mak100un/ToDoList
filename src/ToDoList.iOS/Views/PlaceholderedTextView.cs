@@ -16,10 +16,9 @@ public class PlaceholderedTextView : UITextView
     {
         _placeholderLabel = new UILabel
         {
-            TextColor = ColorPalette.PlaceholderColor,
+            TextColor = ColorPalette.PlaceholderColor.ColorWithAlpha(0.6F),
             Font = FontPalette.BodySize,
             Lines = 1,
-            Enabled = false,
             UserInteractionEnabled = false,
             TranslatesAutoresizingMaskIntoConstraints = false,
         };
@@ -38,16 +37,14 @@ public class PlaceholderedTextView : UITextView
 
         TranslatesAutoresizingMaskIntoConstraints = false;
 
-        var keyboardWidth = UIScreen.MainScreen.Bounds.Width;
-        var accessoryView = new UIToolbar(new CGRect(0, 0, keyboardWidth, 44))
+        var accessoryView = new UIToolbar(new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 44))
         {
             BarStyle = UIBarStyle.Default,
             Translucent = true
         };
 
-        var spacer = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
         var doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, (o, a) => ResignFirstResponder());
-        accessoryView.SetItems(new[] { spacer, doneButton }, false);
+        accessoryView.SetItems(new[] { new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace), doneButton }, false);
         InputAccessoryView = accessoryView;
 
         _disposable = this.WhenAnyValue(tV => tV.Text)

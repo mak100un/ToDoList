@@ -28,7 +28,7 @@ public class StateContainer : UIView
 
         _disposable = this
             .WhenAnyValue(c => c.State)
-            .InvokeCommand(changeStateCommand);
+            .Subscribe(_ => OnStateChanged());
     }
 
     private void OnStateChanged()

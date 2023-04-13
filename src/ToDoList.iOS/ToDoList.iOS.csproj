@@ -93,12 +93,16 @@
     <Compile Include="Styles\FontPalette.cs" />
     <Compile Include="Styles\TextResources.cs" />
     <Compile Include="Styles\ViewPalette.cs" />
+    <Compile Include="ViewControllers\BaseToolbarViewController.cs" />
     <Compile Include="ViewControllers\BaseViewController.cs" />
     <Compile Include="ViewControllers\EditTaskViewController.cs" />
     <Compile Include="ViewControllers\NewTaskViewController.cs" />
     <Compile Include="ViewControllers\ToDoListViewController.cs" />
+    <Compile Include="Views\NavigationBarUnderLine.cs" />
     <Compile Include="Views\PlaceholderedTextView.cs" />
     <Compile Include="Views\StateContainer.cs" />
+    <ImageAsset Include="Resources\Media.xcassets\Add.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Media.xcassets\Add.imageset\plus.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-87.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -138,6 +142,9 @@
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-1024.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\Delete.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Media.xcassets\Delete.imageset\delete.pdf" />
+    <ImageAsset Include="Resources\Media.xcassets\Delete.imageset\Vector.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\Done.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\Done.imageset\Vector.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\ToDo.imageset\Contents.json" />

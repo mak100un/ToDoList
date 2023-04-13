@@ -15,11 +15,12 @@ using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Core.Definitions.Models;
 using ToDoList.Core.Repositories.Interfaces;
 using ToDoList.Core.ViewModels.Base;
+using ToDoList.Core.ViewModels.Interfaces;
 using ToDoList.Core.ViewModels.Items;
 
 namespace ToDoList.Core.ViewModels
 {
-    public class ToDoListViewModel : BaseViewModel
+    public class ToDoListViewModel : BaseViewModel, IBaseToolbarViewModel
     {
         private const int PAGE_SIZE = 10;
 
@@ -30,7 +31,7 @@ namespace ToDoList.Core.ViewModels
 
         public IMvxAsyncCommand<ToDoListItemViewModel> EditTaskCommand { get; }
 
-        public IMvxAsyncCommand NewTaskCommand { get; }
+        public IMvxAsyncCommand ToolbarCommand { get; }
 
         public IMvxAsyncCommand LoadMoreCommand { get; }
 
@@ -63,7 +64,7 @@ namespace ToDoList.Core.ViewModels
                 }
             }), toDoListItem => Items.Contains(toDoListItem));
 
-            NewTaskCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(async () =>
+            ToolbarCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(async () =>
             {
                 if (await NavigationService.Navigate<NewTaskViewModel, ToDoListItemViewModel, ToDoListItemViewModel>(new ToDoListItemViewModel()) is not { } createdItem)
                 {
@@ -102,11 +103,15 @@ namespace ToDoList.Core.ViewModels
                 {
                     LoadingOffset = Items.Count - (_isLoadingMore ? 3 : 2);
                     State = Items.Count > 0 ? State.Default : State.NoData;
+                    OnPropertyChanged(nameof(State));
+                    OnPropertyChanged(nameof(ToolbarItemVisible));
                 });
         }
 
         [Reactive]
         public bool IsLoadMoreEnabled { get; set; }
+
+        public bool ToolbarItemVisible => State == State.Default;
 
         public bool IsLoadingMore
         {
@@ -161,6 +166,7 @@ namespace ToDoList.Core.ViewModels
 
                 IsLoadMoreEnabled = newItems?.Length >= PAGE_SIZE;
                 State = anyItems ? State.Default : State.NoData;
+                OnPropertyChanged(nameof(ToolbarItemVisible));
             });
         }
 
