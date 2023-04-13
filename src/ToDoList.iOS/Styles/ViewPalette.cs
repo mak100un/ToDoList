@@ -6,7 +6,7 @@ namespace ToDoList.iOS.Styles;
 public static class ViewPalette
 {
     public static UILabel CreateTitleLabel(string text = null, UITextAlignment textAlignment = UITextAlignment.Left, UIFont font = null) =>
-        new UILabel
+        new()
         {
             TextColor = ColorPalette.Accent,
             Font = font ?? FontPalette.SecondarySize,

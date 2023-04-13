@@ -1,6 +1,5 @@
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
-using MvvmCross.Plugin.Visibility;
 using ToDoList.Core.Definitions.Converters;
 using ToDoList.Core.ViewModels.Interfaces;
 using UIKit;
