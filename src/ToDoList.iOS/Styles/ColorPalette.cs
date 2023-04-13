@@ -7,7 +7,8 @@ namespace ToDoList.iOS.Styles
     {
         public static readonly UIColor DisabledBackgroundColor = FromHexString("#DEDEDE");
         public static readonly UIColor DisabledTextColor = FromHexString("#B5B5B5");
-        public static readonly UIColor PlaceholderColor = FromHexString("#3C3C43");
+        public static readonly UIColor NavigationBarUnderLineColor = FromHexString("#3C3C43");
+        public static readonly UIColor PlaceholderColor = FromHexString("#3C3C43").ColorWithAlpha(0.6f);
         public static readonly UIColor PrimaryButton = FromHexString("#29B2FF");
         public static readonly UIColor InputBackgroundButton = FromHexString("#EDEDED");
         public static readonly UIColor Primary = UIColor.White;

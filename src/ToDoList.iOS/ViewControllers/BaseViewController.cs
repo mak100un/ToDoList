@@ -32,7 +32,7 @@ public abstract class BaseViewController<TViewModel> : MvxViewController<TViewMo
 
             var bottomLine = new NavigationBarUnderLine
             {
-                BackgroundColor = ColorPalette.PlaceholderColor,
+                BackgroundColor = ColorPalette.NavigationBarUnderLineColor,
                 TranslatesAutoresizingMaskIntoConstraints = false,
             };
 

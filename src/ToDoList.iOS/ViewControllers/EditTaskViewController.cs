@@ -3,6 +3,7 @@ using System.Linq;
 using Cirrious.FluentLayouts.Touch;
 using CoreAnimation;
 using CoreGraphics;
+using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
@@ -67,11 +68,13 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
         {
             TextColor = ColorPalette.Accent,
             Font = FontPalette.BodySize,
-            Placeholder = TextResources.TITLE_PLACEHOLDER,
             BackgroundColor = ColorPalette.InputBackgroundButton,
             ClipsToBounds = true,
             ReturnKeyType = UIReturnKeyType.Done,
         });
+
+        _titleField.AttributedPlaceholder = new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
+
 
         var titlePaddingView = new UIView(new CGRect(0, 0, 16, 0));
         _titleField.LeftView = titlePaddingView;

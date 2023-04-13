@@ -35,8 +35,8 @@ public class LoaderCell : UITableViewCell
             // indicator
             _indicator.AtLeadingOf(this),
             _indicator.AtTrailingOf(this),
-            _indicator.AtTopOf(this, 16),
-            _indicator.AtBottomOf(this, 8)
+            _indicator.AtTopOf(this, 10),
+            _indicator.AtBottomOf(this, 20)
         );
 
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();

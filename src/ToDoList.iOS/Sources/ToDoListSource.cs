@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using DynamicData.Binding;
 using Foundation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Swordfish.NET.Collections;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels.Items;
 using ToDoList.iOS.Cells;
@@ -14,7 +17,7 @@ using UIKit;
 
 namespace ToDoList.iOS.Sources;
 
-public class ToDoListSource : UITableViewSource
+public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
 {
     private readonly IReadOnlyDictionary<ToDoListItemType, string> _toDoListItemTypesToIdentifierMapper
         = Enum.GetValues(typeof(ToDoListItemType))
@@ -41,7 +44,7 @@ public class ToDoListSource : UITableViewSource
     public UITableView TableView { get; }
 
     [Reactive]
-    public ObservableCollectionExtended<BaseToDoListItemViewModel> Items { get; set; }
+    public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; set; }
 
     [Reactive]
     public ICommand LoadMoreCommand { get; set; }
@@ -52,11 +55,6 @@ public class ToDoListSource : UITableViewSource
     [Reactive]
     public int LoadingOffset { get; set; }
 
-    /*public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
-    {
-        return base.GetHeightForRow(tableView, indexPath);
-    }*/
-
     public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
     {
         tableView.DeselectRow(indexPath, false);
@@ -65,8 +63,7 @@ public class ToDoListSource : UITableViewSource
 
     public override void Scrolled(UIScrollView scrollView)
     {
-        if (scrollView.ContentSize.Height <= scrollView.Bounds.Height
-            || scrollView is not UITableView tableView
+        if (scrollView is not UITableView tableView
             || tableView.IndexPathsForVisibleRows?.Any() != true
             || tableView.IndexPathsForVisibleRows.Max(index => index.Row) < LoadingOffset)
         {
@@ -217,4 +214,6 @@ public class ToDoListSource : UITableViewSource
 
         return paths;
     }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }

@@ -45,7 +45,6 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
             TextAlignment = UITextAlignment.Left,
             TextColor = ColorPalette.Primary,
             Font = FontPalette.TitleSize,
-            TranslatesAutoresizingMaskIntoConstraints = false,
             Lines = 1,
             LineBreakMode = UILineBreakMode.TailTruncation
         };
@@ -55,14 +54,12 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
             TextAlignment = UITextAlignment.Left,
             TextColor = ColorPalette.Primary,
             Font = FontPalette.SecondarySize,
-            TranslatesAutoresizingMaskIntoConstraints = false,
             Lines = 1,
         };
 
         var statusImage = new UIImageView
         {
             ContentMode = UIViewContentMode.ScaleAspectFit,
-            TranslatesAutoresizingMaskIntoConstraints = false,
         };
 
         var container = new UIView
@@ -72,9 +69,9 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
         };
         container.Layer.CornerRadius = 8;
 
-        container.Add(titleLabel);
         container.Add(statusLabel);
         container.Add(statusImage);
+        container.Add(titleLabel);
 
         Add(container);
 
@@ -143,11 +140,6 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
         });
 
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
-    }
-
-    public override void LayoutSubviews()
-    {
-        base.LayoutSubviews();
-        this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+        container.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 }

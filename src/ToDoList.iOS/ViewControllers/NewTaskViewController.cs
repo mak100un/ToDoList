@@ -1,6 +1,8 @@
+using System.Drawing;
 using Cirrious.FluentLayouts.Touch;
 using CoreAnimation;
 using CoreGraphics;
+using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
@@ -54,11 +56,12 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
         {
             TextColor = ColorPalette.Accent,
             Font = FontPalette.BodySize,
-            Placeholder = TextResources.TITLE_PLACEHOLDER,
             BackgroundColor = ColorPalette.InputBackgroundButton,
             ClipsToBounds = true,
             ReturnKeyType = UIReturnKeyType.Done,
         });
+
+        _titleField.AttributedPlaceholder =  new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
 
         var titlePaddingView = new UIView(new CGRect(0, 0, 16, 0));
         _titleField.LeftView = titlePaddingView;
@@ -125,6 +128,8 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
             _descriptionView.HeightAnchor.ConstraintEqualTo(200),
 
             _actionButton.TopAnchor.ConstraintGreaterThanOrEqualTo(_descriptionStack.BottomAnchor, 54),
+
+            _actionButton.HeightAnchor.ConstraintEqualTo(55),
         });
 
         View.AddConstraints(

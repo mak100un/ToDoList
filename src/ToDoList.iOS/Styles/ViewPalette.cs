@@ -1,3 +1,4 @@
+using Foundation;
 using UIKit;
 
 namespace ToDoList.iOS.Styles;
@@ -17,6 +18,7 @@ public static class ViewPalette
     public static UIButton CreateActionButton(string text)
     {
         using var buttonConfig = UIButtonConfiguration.FilledButtonConfiguration;
+        buttonConfig.AttributedTitle = new NSAttributedString(text, UIFont.BoldSystemFontOfSize(20), ColorPalette.Primary, UIColor.Clear);
         buttonConfig.TitleAlignment = UIButtonConfigurationTitleAlignment.Center;
         buttonConfig.BaseForegroundColor = ColorPalette.Primary;
         buttonConfig.BaseBackgroundColor = ColorPalette.PrimaryButton;
@@ -27,8 +29,6 @@ public static class ViewPalette
             Configuration = buttonConfig,
             ClipsToBounds = true,
         };
-        button.Font = UIFont.BoldSystemFontOfSize(20);
-        button.SetTitle(text, UIControlState.Normal);
         button.Layer.CornerRadius = 4;
         return button;
     }

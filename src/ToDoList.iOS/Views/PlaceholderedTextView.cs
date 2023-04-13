@@ -16,7 +16,7 @@ public class PlaceholderedTextView : UITextView
     {
         _placeholderLabel = new UILabel
         {
-            TextColor = ColorPalette.PlaceholderColor.ColorWithAlpha(0.6F),
+            TextColor = ColorPalette.PlaceholderColor,
             Font = FontPalette.BodySize,
             Lines = 1,
             UserInteractionEnabled = false,

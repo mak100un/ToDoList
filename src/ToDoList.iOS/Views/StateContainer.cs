@@ -1,20 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using Cirrious.FluentLayouts.Touch;
-using MvvmCross.Base;
-using MvvmCross.Binding.Attributes;
-using MvvmCross.Binding.BindingContext;
 using MvvmCross.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using ToDoList.Core.Definitions;
 using UIKit;
 
 namespace ToDoList.iOS.Views;
 
-public class StateContainer : UIView
+public class StateContainer : UIView, INotifyPropertyChanged
 {
     private readonly IReadOnlyDictionary<State, UIView> _states;
     private IDisposable _disposable;
@@ -28,7 +24,7 @@ public class StateContainer : UIView
 
         _disposable = this
             .WhenAnyValue(c => c.State)
-            .Subscribe(_ => OnStateChanged());
+            .InvokeCommand(changeStateCommand);
     }
 
     private void OnStateChanged()
@@ -61,7 +57,6 @@ public class StateContainer : UIView
         );
     }
 
-    [Reactive]
     public State State { get; set; }
 
     protected override void Dispose(bool disposing)
@@ -73,4 +68,6 @@ public class StateContainer : UIView
         }
         base.Dispose(disposing);
     }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }

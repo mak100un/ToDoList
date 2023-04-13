@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,8 @@ using MvvmCross;
 using MvvmCross.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Swordfish.NET.Collections;
+using Swordfish.NET.Collections.Auxiliary;
 using ToDoList.Core.Definitions;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Definitions.Extensions;
@@ -75,10 +78,12 @@ namespace ToDoList.Core.ViewModels
                 Items.Insert(0, createdItem);
             }));
 
-            LoadMoreCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(() =>
+            LoadMoreCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(async () =>
             {
                 IsLoadingMore = true;
 
+                // Simulate loading
+                await Task.Delay(2500);
                 var newItems = _toDoListRepository.Value.GetItems(ToDoListItemsCount, PAGE_SIZE)?.ToArray();
 
                 if (newItems?.Length > 0)
@@ -89,7 +94,7 @@ namespace ToDoList.Core.ViewModels
                 IsLoadMoreEnabled = newItems?.Length >= PAGE_SIZE;
                 IsLoadingMore = false;
 
-                return Task.CompletedTask;
+                //return Task.CompletedTask;
             },
             ex =>
             {
@@ -103,7 +108,6 @@ namespace ToDoList.Core.ViewModels
                 {
                     LoadingOffset = Items.Count - (_isLoadingMore ? 3 : 2);
                     State = Items.Count > 0 ? State.Default : State.NoData;
-                    OnPropertyChanged(nameof(State));
                     OnPropertyChanged(nameof(ToolbarItemVisible));
                 });
         }
@@ -147,7 +151,7 @@ namespace ToDoList.Core.ViewModels
 
         private int ToDoListItemsCount => _isLoadingMore ? Items.Count - 1 : Items.Count;
 
-        public ObservableCollectionExtended<BaseToDoListItemViewModel> Items { get; } = new();
+        public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; } = new();
 
         public override async Task Initialize()
         {
