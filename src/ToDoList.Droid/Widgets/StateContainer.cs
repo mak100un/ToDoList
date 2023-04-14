@@ -8,7 +8,6 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Java.Interop;
 using MvvmCross.Commands;
 using ReactiveUI;
 using ToDoList.Core.Definitions;
@@ -23,23 +22,38 @@ public class StateContainer : FrameLayout, INotifyPropertyChanged
     private State _previousState;
 
     protected StateContainer(IntPtr javaReference, JniHandleOwnership transfer)
-      : base(javaReference, transfer) => Init();
+      : base(javaReference, transfer)
+    {
+        Init();
+    }
 
     public StateContainer(Context context, IAttributeSet attrs)
-      : base(context, attrs) => Init();
+      : base(context, attrs)
+    {
+        Init();
+    }
 
     public StateContainer(Context context, IAttributeSet attrs, int defStyleAttr)
-      : base(context, attrs, defStyleAttr) => Init();
+      : base(context, attrs, defStyleAttr)
+    {
+        Init();
+    }
 
     public StateContainer(
         Context context,
         IAttributeSet attrs,
         int defStyleAttr,
         int defStyleRes)
-        : base(context, attrs, defStyleAttr, defStyleRes) => Init();
+        : base(context, attrs, defStyleAttr, defStyleRes)
+    {
+        Init();
+    }
 
     public StateContainer(Context context)
-        : base(context) => Init();
+        : base(context)
+    {
+        Init();
+    }
 
     private void Init()
     {
@@ -62,7 +76,7 @@ public class StateContainer : FrameLayout, INotifyPropertyChanged
         _previousState = State;
 
         var currentView = this.GetAllChildViews()?.FirstOrDefault();
-        var newView = States[State];
+        var newView = States[State]();
 
         if (ReferenceEquals(newView, currentView)
             || newView == null)
@@ -80,7 +94,7 @@ public class StateContainer : FrameLayout, INotifyPropertyChanged
 
     public State State { get; set; }
 
-    public IReadOnlyDictionary<State, View> States { get; set; }
+    public IReadOnlyDictionary<State, Func<View>> States { get; set; }
 
     protected override void Dispose(bool disposing)
     {

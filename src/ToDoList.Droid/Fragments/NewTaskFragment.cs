@@ -12,4 +12,6 @@ namespace ToDoList.Droid.Fragments;
 public class NewTaskFragment : BaseFragment<NewTaskViewModel>
 {
     protected override int ResourceId => Resource.Layout.new_task_layout;
+
+    protected override bool HasBackButton => true;
 }

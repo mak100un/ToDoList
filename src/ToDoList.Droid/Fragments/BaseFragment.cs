@@ -1,45 +1,57 @@
+using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Binding;
+using AndroidX.Core.Graphics.Drawable;
+using MvvmCross;
+using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views.Fragments;
+using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Core.ViewModels.Base;
+using ToDoList.Droid.Extensions;
 
 namespace ToDoList.Droid.Fragments;
 
 public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
     where TViewModel : BaseViewModel
 {
+    private Toolbar _toolbar;
     protected abstract int ResourceId { get; }
+
+    protected abstract bool HasBackButton { get; }
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         base.OnCreateView(inflater, container, savedInstanceState);
         var view = this.BindingInflate(ResourceId, container, false);
 
-        var toolbar = view.FindViewById<Toolbar>(Resource.Id.toolbar);
+        if (!HasBackButton)
+        {
+            return view;
+        }
 
-        var set = this.CreateBindingSet<BaseFragment<TViewModel>, TViewModel>();
+        (_toolbar = view.FindViewById<Toolbar>(Resource.Id.toolbar)).NavigationClick += OnNavigationClick;
 
-        /*set
-            .Bind(toolbar)
-            .For(v => v.BindClick())
-            .To(vm => vm.SelectedSegment);*/
-
-        set.Apply();
+        Activity?.Then(activity =>
+        {
+            var icon = activity.GetDrawableFromAttribute(Resource.Attribute.homeAsUpIndicator);
+            DrawableCompat.SetTint(icon, Color.Black);
+            _toolbar.NavigationIcon = icon;
+        });
 
         return view;
     }
 
-    public override void OnStart()
-    {
-        base.OnStart();
+    private void OnNavigationClick(object sender, Toolbar.NavigationClickEventArgs e) => Mvx.IoCProvider.Resolve<IMvxNavigationService>().Close(ViewModel);
 
-        if (Activity?.ActionBar is not { } actionBar)
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing
+            && _toolbar != null)
         {
-            return;
+            _toolbar.NavigationClick -= OnNavigationClick;
         }
+        base.Dispose(disposing);
     }
 }

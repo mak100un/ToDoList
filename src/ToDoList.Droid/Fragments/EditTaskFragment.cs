@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.DroidX.RecyclerView;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels;
@@ -24,6 +21,8 @@ namespace ToDoList.Droid.Fragments;
 public class EditTaskFragment : BaseFragment<EditTaskViewModel>
 {
     protected override int ResourceId => Resource.Layout.edit_task_layout;
+
+    protected override bool HasBackButton => true;
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {

@@ -25,11 +25,7 @@ namespace ToDoList.iOS.ViewControllers
             [nameof(ToDoListItemType.Task)] = typeof(ToDoListItemCell),
         };
 
-        private ToDoListSource _todoListDataSource;
-        private UIButton _newTaskButton;
         private StateContainer _stateContainer;
-        private UIView _emptyView;
-        private UIStackView _emptyStackView;
 
         public override string Image => "Add";
 
@@ -37,49 +33,116 @@ namespace ToDoList.iOS.ViewControllers
         {
             base.CreateView();
 
-            _emptyView = new UIView
+            UIView emptyView = null;
+            UITableView todoListTableView = null;
+
+            View.Add(_stateContainer = new StateContainer(new Dictionary<State, Func<UIView>>
             {
-                TranslatesAutoresizingMaskIntoConstraints = false,
-            };
-
-            _emptyView.Add(_emptyStackView = new UIStackView
-            {
-                Axis = UILayoutConstraintAxis.Vertical,
-                Alignment = UIStackViewAlignment.Fill,
-                Spacing = 40f,
-            });
-
-            _emptyStackView.AddArrangedSubview(ViewPalette.CreateTitleLabel(TextResources.NO_TASKS_YET, UITextAlignment.Center, UIFont.BoldSystemFontOfSize(32)));
-
-            _emptyStackView.AddArrangedSubview(_newTaskButton = ViewPalette.CreateActionButton(TextResources.CREATE_FIRST_ONE));
-
-            var todoListTableView = new UITableView(CGRect.Empty, UITableViewStyle.Plain)
-            {
-                ScrollsToTop = false,
-                SeparatorStyle = UITableViewCellSeparatorStyle.None,
-                BackgroundColor = UIColor.Clear,
-                AutoresizingMask = UIViewAutoresizing.All,
-                EstimatedRowHeight = 44f,
-                RowHeight = UITableView.AutomaticDimension,
-                TranslatesAutoresizingMaskIntoConstraints = false,
-            };
-
-            foreach (var itemCell in _itemTypesToCellsMapper)
-            {
-                todoListTableView.RegisterClassForCellReuse(itemCell.Value, itemCell.Key);
-            }
-
-            todoListTableView.Source = (_todoListDataSource = new ToDoListSource(todoListTableView));
-
-            View.Add(_stateContainer = new StateContainer(new Dictionary<State, UIView>
-            {
-                [State.Default] = todoListTableView,
-                [State.NoData] = _emptyView,
+                [State.Default] = CreateTableView,
+                [State.NoData] = CreateEmptyView,
                 [State.None] = default,
             }));
 
             _stateContainer.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
-            _emptyView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+
+            UIView CreateTableView()
+            {
+                return todoListTableView ??= CreateInnerTableView();
+
+                UITableView CreateInnerTableView()
+                {
+                    todoListTableView = new UITableView(CGRect.Empty, UITableViewStyle.Plain)
+                    {
+                        ScrollsToTop = false,
+                        SeparatorStyle = UITableViewCellSeparatorStyle.None,
+                        BackgroundColor = UIColor.Clear,
+                        AutoresizingMask = UIViewAutoresizing.All,
+                        EstimatedRowHeight = 44f,
+                        RowHeight = UITableView.AutomaticDimension,
+                        TranslatesAutoresizingMaskIntoConstraints = false,
+                    };
+
+                    foreach (var itemCell in _itemTypesToCellsMapper)
+                    {
+                        todoListTableView.RegisterClassForCellReuse(itemCell.Value, itemCell.Key);
+                    }
+
+                    var todoListDataSource = new ToDoListSource(todoListTableView);
+                    todoListTableView.Source = todoListDataSource;
+
+                    var set = this.CreateBindingSet<ToDoListViewController, ToDoListViewModel>();
+
+                    set.Bind(todoListDataSource)
+                        .For(x => x.LoadMoreCommand)
+                        .To(vm => vm.LoadMoreCommand);
+
+                    set.Bind(todoListDataSource)
+                        .For(x => x.EditTaskCommand)
+                        .To(vm => vm.EditTaskCommand);
+
+                    set.Bind(todoListDataSource)
+                        .For(x => x.LoadingOffset)
+                        .To(vm => vm.LoadingOffset);
+
+                    set
+                        .Bind(todoListDataSource)
+                        .For(v => v.Items)
+                        .To(vm => vm.Items);
+
+                    set.Apply();
+
+                    return todoListTableView;
+                }
+            }
+
+            UIView CreateEmptyView()
+            {
+                return emptyView ??= CreateInnerEmptyView();
+
+                UIView CreateInnerEmptyView()
+                {
+                    emptyView = new UIView
+                    {
+                        TranslatesAutoresizingMaskIntoConstraints = false,
+                    };
+
+                    var emptyStackView = new UIStackView
+                    {
+                        Axis = UILayoutConstraintAxis.Vertical,
+                        Alignment = UIStackViewAlignment.Fill,
+                        Spacing = 40f,
+                    };
+
+                    emptyView.Add(emptyStackView);
+
+                    emptyStackView.AddArrangedSubview(ViewPalette.CreateTitleLabel(TextResources.NO_TASKS_YET, UITextAlignment.Center, UIFont.BoldSystemFontOfSize(32)));
+
+                    var newTaskButton = ViewPalette.CreateActionButton(TextResources.CREATE_FIRST_ONE);
+                    emptyStackView.AddArrangedSubview(newTaskButton);
+
+                    var set = this.CreateBindingSet<ToDoListViewController, ToDoListViewModel>();
+
+                    set
+                        .Bind(newTaskButton)
+                        .For(v => v.BindTouchUpInside())
+                        .To(vm => vm.ToolbarCommand);
+
+                    set.Apply();
+
+                    NSLayoutConstraint.ActivateConstraints(new[]
+                    {
+                        emptyStackView.TopAnchor.ConstraintGreaterThanOrEqualTo(emptyView.TopAnchor),
+                        emptyStackView.BottomAnchor.ConstraintLessThanOrEqualTo(emptyView.BottomAnchor),
+                        emptyStackView.LeadingAnchor.ConstraintEqualTo(emptyView.LeadingAnchor, 20),
+                        emptyStackView.TrailingAnchor.ConstraintEqualTo(emptyView.TrailingAnchor, -20),
+                        emptyStackView.CenterYAnchor.ConstraintEqualTo(emptyView.CenterYAnchor),
+                    });
+
+                    emptyView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+
+                    return emptyView;
+                }
+            }
         }
 
         protected override void BindView()
@@ -87,28 +150,6 @@ namespace ToDoList.iOS.ViewControllers
             base.BindView();
 
             var set = this.CreateBindingSet<ToDoListViewController, ToDoListViewModel>();
-
-            set.Bind(_todoListDataSource)
-                .For(x => x.LoadMoreCommand)
-                .To(vm => vm.LoadMoreCommand);
-
-            set.Bind(_todoListDataSource)
-                .For(x => x.EditTaskCommand)
-                .To(vm => vm.EditTaskCommand);
-
-            set.Bind(_todoListDataSource)
-                .For(x => x.LoadingOffset)
-                .To(vm => vm.LoadingOffset);
-
-            set
-                .Bind(_todoListDataSource)
-                .For(v => v.Items)
-                .To(vm => vm.Items);
-
-            set
-                .Bind(_newTaskButton)
-                .For(v => v.BindTouchUpInside())
-                .To(vm => vm.ToolbarCommand);
 
             set
                 .Bind(_stateContainer)
@@ -128,12 +169,6 @@ namespace ToDoList.iOS.ViewControllers
                 _stateContainer.TopAnchor.ConstraintEqualTo(TopLayoutGuide.GetBottomAnchor()),
                 _stateContainer.LeadingAnchor.ConstraintEqualTo(safeAreaGuide.LeadingAnchor),
                 _stateContainer.TrailingAnchor.ConstraintEqualTo(safeAreaGuide.TrailingAnchor),
-
-                _emptyStackView.TopAnchor.ConstraintGreaterThanOrEqualTo(_emptyView.TopAnchor),
-                _emptyStackView.BottomAnchor.ConstraintLessThanOrEqualTo(_emptyView.BottomAnchor),
-                _emptyStackView.LeadingAnchor.ConstraintEqualTo(_emptyView.LeadingAnchor, 20),
-                _emptyStackView.TrailingAnchor.ConstraintEqualTo(_emptyView.TrailingAnchor, -20),
-                _emptyStackView.CenterYAnchor.ConstraintEqualTo(_emptyView.CenterYAnchor),
             });
         }
     }

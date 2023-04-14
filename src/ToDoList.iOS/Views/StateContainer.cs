@@ -12,11 +12,11 @@ namespace ToDoList.iOS.Views;
 
 public class StateContainer : UIView, INotifyPropertyChanged
 {
-    private readonly IReadOnlyDictionary<State, UIView> _states;
+    private readonly IReadOnlyDictionary<State, Func<UIView>> _states;
     private IDisposable _disposable;
     private State _previousState;
 
-    public StateContainer(IReadOnlyDictionary<State, UIView> states)
+    public StateContainer(IReadOnlyDictionary<State, Func<UIView>> states)
     {
         _states = states;
 
@@ -36,7 +36,7 @@ public class StateContainer : UIView, INotifyPropertyChanged
         _previousState = State;
 
         var currentView = Subviews?.FirstOrDefault();
-        var newView = _states[State];
+        var newView = _states[State]();
 
         if (ReferenceEquals(newView, currentView)
             || newView == null)

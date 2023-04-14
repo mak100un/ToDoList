@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
     />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         style="@style/ZeroStyle"
         android:fillViewport="true"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_marginHorizontal="@dimen/margin_medium">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -170,7 +170,7 @@
 
             </LinearLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 style="@style/ActionButtonStyle"
                 android:text="@string/save_changes"
                 app:MvxBind="Click ActionCommand; Enabled IsValid"
@@ -180,8 +180,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

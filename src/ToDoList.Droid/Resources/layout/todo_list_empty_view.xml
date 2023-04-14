@@ -11,14 +11,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primaryTextColor"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textStyle="bold"
         android:textSize="@dimen/header_text_size"
         android:text="@string/no_tasks_yet"/>
     
-    <Button
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/ActionButtonStyle"
         android:text="@string/create_first_one"
-        app:MvxBind="Click NewTaskCommand"
+        android:textStyle="bold"
+        android:textSize="@dimen/body_text_size"
+        app:MvxBind="Click ToolbarCommand"
         android:layout_marginTop="40dp"/>
 
 </LinearLayout>

@@ -4,14 +4,12 @@
     <!--
         Standard dimensions
     -->
-    <dimen name="margin_tiny">4dp</dimen>
-    <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_medium">20dp</dimen>
     <dimen name="margin_large">32dp</dimen>
-    <dimen name="margin_huge">64dp</dimen>
     <dimen name="primary_text_size">12sp</dimen>
     <dimen name="header_text_size">32dp</dimen>
     <dimen name="body_text_size">20sp</dimen>
     <dimen name="edit_text_size">17sp</dimen>
     <dimen name="segmented_control_padding">2dp</dimen>
+    <dimen name="primary_elevation">12dp</dimen>
 </resources>

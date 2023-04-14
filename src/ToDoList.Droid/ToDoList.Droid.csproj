@@ -67,6 +67,7 @@
     <Compile Include="Definitions\Converters\StatusToBackgroundColorConverter.cs" />
     <Compile Include="Definitions\Converters\StatusToImageConverter.cs" />
     <Compile Include="Definitions\Converters\StatusToTextColorConverter.cs" />
+    <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\ViewGroupExtensions.cs" />
     <Compile Include="Fragments\BaseFragment.cs" />
     <Compile Include="Fragments\EditTaskFragment.cs" />
@@ -140,6 +141,8 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\action_button_color_states.xml" />
+    <AndroidResource Include="Resources\drawable\action_button_text_color_selector.xml" />
     <AndroidResource Include="Resources\drawable\add.xml" />
     <AndroidResource Include="Resources\drawable\delete.xml" />
     <AndroidResource Include="Resources\drawable\done.xml" />
@@ -157,7 +160,6 @@
     <AndroidResource Include="Resources\layout\new_task_layout.xml" />
     <AndroidResource Include="Resources\layout\todo_list_layout.xml" />
     <AndroidResource Include="Resources\layout\todo_list_empty_view.xml" />
-    <AndroidResource Include="Resources\layout\todo_list_recyclerview.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
