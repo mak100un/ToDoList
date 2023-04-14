@@ -1,12 +1,15 @@
+using Android.Views;
+using Android.Widget;
 using Microsoft.Extensions.Logging;
+using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.IoC;
 using MvvmCross.Platforms.Android.Core;
 using Serilog;
 using Serilog.Extensions.Logging;
 using ToDoList.Droid.Services;
-using ToDoList;
 using ToDoList.Core;
 using ToDoList.Core.Services.Interfaces;
+using ToDoList.Droid.Bindings;
 
 namespace ToDoList.Droid
 {
@@ -22,6 +25,23 @@ namespace ToDoList.Droid
         {
             PropertyInjectorOptions = MvxPropertyInjectorOptions.MvxInject
         };
+
+        protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
+        {
+            base.FillTargetFactories(registry);
+
+            registry.RegisterPropertyInfoBindingFactory(
+                typeof(ImageViewDrawableIdTargetBinding),
+                typeof(ImageView), "DrawableId");
+
+            registry.RegisterPropertyInfoBindingFactory(
+                typeof(TextViewTextColorTargetBinding),
+                typeof(TextView), "TextColor");
+
+            registry.RegisterPropertyInfoBindingFactory(
+                typeof(ViewBackgroundColorTargetBinding),
+                typeof(View), "BackgroundColor");
+        }
 
         protected override ILoggerProvider CreateLogProvider() => new SerilogLoggerProvider();
 

@@ -43,16 +43,12 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
 
     public UITableView TableView { get; }
 
-    [Reactive]
     public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; set; }
 
-    [Reactive]
     public ICommand LoadMoreCommand { get; set; }
 
-    [Reactive]
     public ICommand EditTaskCommand { get; set; }
 
-    [Reactive]
     public int LoadingOffset { get; set; }
 
     public override void RowSelected(UITableView tableView, NSIndexPath indexPath)

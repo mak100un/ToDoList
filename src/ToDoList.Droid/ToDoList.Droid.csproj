@@ -64,6 +64,10 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\ToDoListItemRecyclerAdapter.cs" />
+    <Compile Include="Bindings\ImageViewDrawableIdTargetBinding.cs" />
+    <Compile Include="Bindings\TextViewTextColorTargetBinding.cs" />
+    <Compile Include="Bindings\ViewBackgroundColorTargetBinding.cs" />
     <Compile Include="Definitions\Converters\StatusToBackgroundColorConverter.cs" />
     <Compile Include="Definitions\Converters\StatusToImageConverter.cs" />
     <Compile Include="Definitions\Converters\StatusToTextColorConverter.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="Fragments\NewTaskFragment.cs" />
     <Compile Include="Fragments\ToDoListFragment.cs" />
     <Compile Include="Linker\LinkerPleaseInclude.cs" />
+    <Compile Include="Listeners\RecyclerPaginationListener.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Setup.cs" />
@@ -194,8 +199,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Adapters" />
-    <Folder Include="Listeners" />
     <Folder Include="ViewHolder" />
   </ItemGroup>
   <ItemGroup>

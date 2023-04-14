@@ -3,6 +3,7 @@ using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
 using AndroidX.Core.Graphics.Drawable;
+using Google.Android.Material.AppBar;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -16,7 +17,7 @@ namespace ToDoList.Droid.Fragments;
 public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
     where TViewModel : BaseViewModel
 {
-    private Toolbar _toolbar;
+    private MaterialToolbar _toolbar;
     protected abstract int ResourceId { get; }
 
     protected abstract bool HasBackButton { get; }
@@ -31,7 +32,7 @@ public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
             return view;
         }
 
-        (_toolbar = view.FindViewById<Toolbar>(Resource.Id.toolbar)).NavigationClick += OnNavigationClick;
+        (_toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.toolbar)).NavigationClick += OnNavigationClick;
 
         Activity?.Then(activity =>
         {

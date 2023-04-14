@@ -2,7 +2,7 @@
 <resources>
     <!-- Base theme applied regardless of API level -->
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/accentColor</item>
         <item name="colorPrimaryVariant">@color/primaryColor</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="colorSecondary">@color/accentColor</item>
@@ -10,7 +10,7 @@
         <item name="colorOnSecondary">#FFFFFF</item>
         <item name="colorError">#F44336</item>
         <item name="colorOnError">#FFFFFF</item>
-        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorSurface">@color/primaryColor</item>
         <item name="colorOnSurface">#212121</item>
         <item name="android:colorBackground">@color/primaryColor</item>
         <item name="colorOnBackground">#212121</item>
@@ -50,5 +50,12 @@
         <item name="android:stateListAnimator">@null</item>
         <item name="android:letterSpacing">0.05</item>
         <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="TextInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="hintTextColor">@color/accentColor</item>
+        <item name="android:textColorHint">@color/placeholder_color</item>
     </style>
 </resources>

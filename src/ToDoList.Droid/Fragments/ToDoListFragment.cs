@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Android.OS;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -9,6 +10,8 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using ToDoList.Core.Definitions;
 using ToDoList.Core.ViewModels;
 using ToDoList.Core.ViewModels.Extra;
+using ToDoList.Droid.Adapters;
+using ToDoList.Droid.Listeners;
 using ToDoList.Droid.TemplateSelectors;
 using ToDoList.Droid.Widgets;
 
@@ -34,7 +37,6 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
         var stateContainer = view.FindViewById<StateContainer>(Resource.Id.state_container);
 
-
         stateContainer.States = new Dictionary<State, Func<View>>
         {
             [State.Default] = CreateRecyclerView,
@@ -51,8 +53,16 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
             MvxRecyclerView CreateInnerRecyclerView()
             {
                 mvxRecyclerView = new MvxRecyclerView(Activity, null);
+                var layoutManager = mvxRecyclerView.GetLayoutManager() as LinearLayoutManager;
+                layoutManager.StackFromEnd = true;
+                layoutManager.ReverseLayout = false;
+                //mvxRecyclerView.SetAdapter(new ToDoListItemRecyclerAdapter());
+
+                var scrollListener = new RecyclerPaginationListener(layoutManager);
+                mvxRecyclerView.AddOnScrollListener(scrollListener);
                 mvxRecyclerView.ItemTemplateId = Resource.Layout.item_template;
                 mvxRecyclerView.ItemTemplateSelector = new ToDoListItemTemplateSelector();
+
                 var set = this.CreateBindingSet<ToDoListFragment, ToDoListViewModel>();
 
                 set

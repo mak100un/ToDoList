@@ -13,4 +13,6 @@
     <color name="segmented_control_background_color">#7676801F</color>
     <color name="disabled_button_background_color">#DEDEDE</color>
     <color name="disabled_text_color">#B5B5B5</color>
+    
+    <color name="placeholder_color">#8a8a8e</color>
 </resources>
