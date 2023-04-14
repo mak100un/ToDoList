@@ -27729,32 +27729,29 @@ namespace ToDoList.Droid
 			// aapt resource value: 0x7F0801E1
 			public const int west = 2131231201;
 			
+			// aapt resource value: 0x7F0801E3
+			public const int withinBounds = 2131231203;
+			
 			// aapt resource value: 0x7F0801E2
-			public const int white_space = 2131231202;
+			public const int withText = 2131231202;
 			
 			// aapt resource value: 0x7F0801E4
-			public const int withinBounds = 2131231204;
-			
-			// aapt resource value: 0x7F0801E3
-			public const int withText = 2131231203;
+			public const int wrap = 2131231204;
 			
 			// aapt resource value: 0x7F0801E5
-			public const int wrap = 2131231205;
+			public const int wrap_content = 2131231205;
 			
 			// aapt resource value: 0x7F0801E6
-			public const int wrap_content = 2131231206;
+			public const int wrap_content_constrained = 2131231206;
 			
 			// aapt resource value: 0x7F0801E7
-			public const int wrap_content_constrained = 2131231207;
+			public const int x_left = 2131231207;
 			
 			// aapt resource value: 0x7F0801E8
-			public const int x_left = 2131231208;
+			public const int x_right = 2131231208;
 			
 			// aapt resource value: 0x7F0801E9
-			public const int x_right = 2131231209;
-			
-			// aapt resource value: 0x7F0801EA
-			public const int zero_corner_chip = 2131231210;
+			public const int zero_corner_chip = 2131231209;
 			
 			static Id()
 			{
