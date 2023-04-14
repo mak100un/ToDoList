@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mvx Scaffolding</string>
-    <string name="app_welcome_message">Welcome!!</string>
-    <string name="app_message">App scaffolded with MvxScaffolding</string>
+    <string name="app_name">ToDoList</string>
+    <string name="title">TITLE</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="status">STATUS</string>
+    <string name="title_placeholder">Short task title</string>
+    <string name="description_placeholder">More details here...</string>
+    <string name="create">Create</string>
+    <string name="create_first_one">Create first one</string>
+    <string name="save_changes">Save changes</string>
+    <string name="created_at">CREATED AT</string>
+    <string name="updated_at">UPDATED AT</string>
+    <string name="no_tasks_yet">No tasks yet</string>
 </resources>

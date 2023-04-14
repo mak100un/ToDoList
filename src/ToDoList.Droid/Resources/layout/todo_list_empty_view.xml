@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/empty_view"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal|center_vertical"
+              android:paddingHorizontal="@dimen/margin_medium">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/header_text_size"
+        android:text="@string/no_tasks_yet"/>
+    
+    <Button
+        style="@style/ActionButtonStyle"
+        android:text="@string/create_first_one"
+        app:MvxBind="Click NewTaskCommand"
+        android:layout_marginTop="40dp"/>
+
+</LinearLayout>

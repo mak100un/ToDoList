@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginVertical="10dp"
+              android:layout_marginHorizontal="@dimen/margin_medium"
+              android:paddingHorizontal="@dimen/margin_medium"
+              android:paddingVertical="10dp"
+              app:MvxBind="BackgroundColor Status, Converter=StatusToBackground">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/body_text_size"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:MvxBind="Text Title; TextColor Status, Converter=StatusToTextColor"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:textSize="@dimen/primary_text_size"
+        android:ellipsize="none"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="8dp"
+        app:MvxBind="Text Status, Converter=StatusToText; TextColor Status, Converter=StatusToTextColor"/>
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="end|center_vertical"
+        app:MvxBind="DrawableId Status, Converter=StatusToImage"/>
+
+</LinearLayout>

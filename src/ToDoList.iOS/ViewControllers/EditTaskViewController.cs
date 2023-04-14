@@ -140,7 +140,6 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
             Spacing = 4,
         });
 
-
         _itemInfoStack.AddArrangedSubview(_createdAtInfoStack = new UIStackView
         {
             Alignment = UIStackViewAlignment.Fill,
@@ -256,7 +255,7 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
             .Bind(_updatedAtInfoStack)
             .For(v => v.BindVisibility())
             .To(vm => vm.UpdatedAtVisible)
-            .WithConversion(new MvxVisibilityValueConverter());
+            .WithConversion<MvxVisibilityValueConverter>();
 
         set
             .Bind(_actionButton)

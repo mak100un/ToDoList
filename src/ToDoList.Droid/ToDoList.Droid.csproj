@@ -41,7 +41,6 @@
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -56,7 +55,6 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <EnableProguard>true</EnableProguard>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android.Export" />
@@ -66,21 +64,36 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Definitions\Converters\StatusToBackgroundColorConverter.cs" />
+    <Compile Include="Definitions\Converters\StatusToImageConverter.cs" />
+    <Compile Include="Definitions\Converters\StatusToTextColorConverter.cs" />
+    <Compile Include="Extensions\ViewGroupExtensions.cs" />
+    <Compile Include="Fragments\BaseFragment.cs" />
+    <Compile Include="Fragments\EditTaskFragment.cs" />
+    <Compile Include="Fragments\NewTaskFragment.cs" />
+    <Compile Include="Fragments\ToDoListFragment.cs" />
     <Compile Include="Linker\LinkerPleaseInclude.cs" />
     <Compile Include="MainApplication.cs" />
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Setup.cs" />
+    <Compile Include="TemplateSelectors\ToDoListItemTemplateSelector.cs" />
     <Compile Include="Views\BaseActivity.cs" />
-    <Compile Include="Views\BaseFragment.cs" />
-    <Compile Include="Views\Main\MainContainerActivity.cs" />
-    <Compile Include="Views\Main\MainFragment.cs" />
+    <Compile Include="Views\MainActivity.cs" />
     <Compile Include="Views\Splash\SplashActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Widgets\SegmentedControl.cs" />
+    <Compile Include="Widgets\StateContainer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper">
       <Version>10.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Fody">
+      <Version>6.6.5-beta2</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LiteDB">
       <Version>5.0.16</Version>
@@ -94,13 +107,16 @@
     <PackageReference Include="MvvmCross.DroidX.Material">
       <Version>8.0.2</Version>
     </PackageReference>
+    <PackageReference Include="MvvmCross.DroidX.RecyclerView">
+      <Version>8.0.2</Version>
+    </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Visibility">
       <Version>8.0.2</Version>
     </PackageReference>
-    <PackageReference Include="ReactiveUI">
-      <Version>18.4.26</Version>
+    <PackageReference Include="PropertyChanged.Fody">
+      <Version>4.1.0</Version>
     </PackageReference>
-    <PackageReference Include="ReactiveUI.Fody">
+    <PackageReference Include="ReactiveUI">
       <Version>18.4.26</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging">
@@ -124,11 +140,24 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\fragment_main.axml" />
-    <AndroidResource Include="Resources\layout\layout_toolbar.axml" />
+    <AndroidResource Include="Resources\drawable\add.xml" />
+    <AndroidResource Include="Resources\drawable\delete.xml" />
+    <AndroidResource Include="Resources\drawable\done.xml" />
+    <AndroidResource Include="Resources\drawable\inprogress.xml" />
+    <AndroidResource Include="Resources\drawable\segmented_control_background.xml" />
+    <AndroidResource Include="Resources\drawable\segmented_control_item_background.xml" />
+    <AndroidResource Include="Resources\drawable\todo.xml" />
+    <AndroidResource Include="Resources\drawable\todo_item_disabled_background.xml" />
+    <AndroidResource Include="Resources\drawable\todo_item_primary_background.xml" />
     <AndroidResource Include="Resources\layout\activity_main_container.axml" />
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\layout\edit_task_layout.xml" />
+    <AndroidResource Include="Resources\layout\item_template.xml" />
+    <AndroidResource Include="Resources\layout\layout_toolbar.axml" />
+    <AndroidResource Include="Resources\layout\loading_item.xml" />
+    <AndroidResource Include="Resources\layout\new_task_layout.xml" />
+    <AndroidResource Include="Resources\layout\todo_list_layout.xml" />
+    <AndroidResource Include="Resources\layout\todo_list_empty_view.xml" />
+    <AndroidResource Include="Resources\layout\todo_list_recyclerview.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
@@ -161,6 +190,15 @@
       <Project>{83A5A81A-EE51-411A-A55F-8618EF0F9F50}</Project>
       <Name>ToDoList.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Adapters" />
+    <Folder Include="Listeners" />
+    <Folder Include="ViewHolder" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+    <Content Include="FodyWeavers.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

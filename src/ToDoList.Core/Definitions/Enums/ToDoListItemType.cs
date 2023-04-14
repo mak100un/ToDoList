@@ -2,7 +2,7 @@ namespace ToDoList.Core.Definitions.Enums;
 
 public enum ToDoListItemType
 {
-    Task,
+    Task = 0,
 
-    Loading
+    Loading = 1
 }

@@ -8,10 +8,5 @@ namespace ToDoList.Core.Definitions.Converters;
 public class StatusToTextConverter : MvxValueConverter<ToDoTaskStatus, string>
 {
     protected override string Convert(ToDoTaskStatus value, Type targetType, object parameter, CultureInfo culture)
-        => value switch
-        {
-            ToDoTaskStatus.Done => "DONE",
-            ToDoTaskStatus.InProgress => "IN PROGRESS",
-            ToDoTaskStatus.ToDo => "TODO",
-        };
+        => value.ToString().ToUpper();
 }

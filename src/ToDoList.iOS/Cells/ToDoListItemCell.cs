@@ -114,27 +114,27 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
             set.Bind(statusLabel)
                 .For(x => x.Text)
                 .To(vm => vm.Status)
-                .WithConversion(new StatusToTextConverter());
+                .WithConversion<StatusToTextConverter>();
 
             set.Bind(statusImage)
                 .For(x => x.Image)
                 .To(vm => vm.Status)
-                .WithConversion(new StatusToImageConverter());
+                .WithConversion<StatusToImageConverter>();
 
             set.Bind(titleLabel)
                 .For(x => x.TextColor)
                 .To(vm => vm.Status)
-                .WithConversion(new StatusToTextColorConverter());
+                .WithConversion<StatusToTextColorConverter>();
 
             set.Bind(statusLabel)
                 .For(x => x.TextColor)
                 .To(vm => vm.Status)
-                .WithConversion(new StatusToTextColorConverter());
+                .WithConversion<StatusToTextColorConverter>();
 
             set.Bind(container)
                 .For(x => x.BackgroundColor)
                 .To(vm => vm.Status)
-                .WithConversion(new StatusToBackgroundColorConverter());
+                .WithConversion<StatusToBackgroundColorConverter>();
 
             set.Apply();
         });
