@@ -39,11 +39,13 @@ public class ScrollableTextInputEditText : TextInputEditText
         {
             SetOnTouchListener(null);
         }
+
         base.Dispose(disposing);
     }
 
     private void InitScroll() => SetOnTouchListener(new EditorTouchListener());
 
+    // TODO Change scrollable property is not enough?
     private class EditorTouchListener : Java.Lang.Object, IOnTouchListener
     {
         /// <inheritdoc/>

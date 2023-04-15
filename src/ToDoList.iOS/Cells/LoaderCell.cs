@@ -26,12 +26,13 @@ public class LoaderCell : UITableViewCell
             HidesWhenStopped = false,
             Transform = CGAffineTransform.MakeScale(1.5f, 1.5f)
         };
+
+        // TODO ContentView.AddSubview() ?
         Add(_indicator);
 
         StartAnimating();
 
         this.AddConstraints(
-
             // indicator
             _indicator.AtLeadingOf(this),
             _indicator.AtTrailingOf(this),
@@ -42,6 +43,7 @@ public class LoaderCell : UITableViewCell
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 
+    // TODO Why main thread ?
     public void StartAnimating() => DispatchQueue.MainQueue.DispatchAsync(() => _indicator?.StartAnimating());
 
     protected override void Dispose(bool disposing)

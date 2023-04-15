@@ -16,8 +16,10 @@ namespace ToDoList.Core.Repositories
 
         private ILiteCollection<ToDoListItemDalModel> DbCollection => _dbCollection ??= _liteDatabase.Value.GetCollection<ToDoListItemDalModel>();
 
+        // TODO While not DI and double-lazy-registration
         public ToDoListRepository() => _liteDatabase = new Lazy<ILiteDatabase>(Mvx.IoCProvider.Resolve<ILiteDatabase>);
 
+        // TODO Probably Query() should be used with order and skip/take
         public IEnumerable<ToDoListItemDalModel> GetItems(int offset, int limit) => DbCollection.FindAll().OrderByDescending(item => item.CreatedAt).Skip(offset).Take(limit).ToArray();
 
         public void Update(ToDoListItemDalModel toDoListItem) => DbCollection.Update(toDoListItem);

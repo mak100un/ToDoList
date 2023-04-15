@@ -34,6 +34,8 @@ namespace ToDoList.iOS.Services
             }));
 
             await currentViewController.PresentViewControllerAsync(alert, true);
+
+            // TODO Not native behavior
             alert.View.Superview.UserInteractionEnabled = true;
             alert.View.Superview.AddGestureRecognizer(new UITapGestureRecognizer((Action)CancelAction));
 
@@ -45,7 +47,7 @@ namespace ToDoList.iOS.Services
                 alert?.Dispose();
                 alert = null;
             }
-            
+
             void CancelAction()
             {
                 tcs.TrySetResult(false);

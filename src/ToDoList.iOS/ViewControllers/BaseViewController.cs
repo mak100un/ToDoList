@@ -38,7 +38,6 @@ public abstract class BaseViewController<TViewModel> : MvxViewController<TViewMo
 
             NavigationController.NavigationBar.Add(bottomLine);
 
-
             NSLayoutConstraint.ActivateConstraints(new[]
             {
                 bottomLine.TopAnchor.ConstraintGreaterThanOrEqualTo(NavigationController.NavigationBar.TopAnchor),
@@ -61,6 +60,7 @@ public abstract class BaseViewController<TViewModel> : MvxViewController<TViewMo
     public override void ViewWillAppear(bool animated)
     {
         base.ViewWillAppear(animated);
+        // TODO Why here
         View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 

@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace ToDoList.Core.Definitions.Attributes;
 
+// TODO What's the purpose of this?
 public class AnyObserveChangedAttribute : ValidationAttribute
 {
     private static readonly Type _observeAttributeType = typeof(ObserveAttribute);

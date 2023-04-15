@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Android.OS;
 using Android.Views;
+using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using Google.Android.Material.FloatingActionButton;
+using Google.Android.Material.TextField;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding;
@@ -37,6 +39,7 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
         var view = base.OnCreateView(inflater, container, savedInstanceState);
 
+        // TODO Simplify with Visibility property ?
         var stateContainer = view.FindViewById<StateContainer>(Resource.Id.state_container);
 
         stateContainer.States = new Dictionary<State, Func<View>>
@@ -97,11 +100,11 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
                     switch (dy)
                     {
                         case > 0
-                        when addButton.IsShown:
+                            when addButton.IsShown:
                             addButton.Hide();
                             break;
                         case < 0
-                             when !addButton.IsShown:
+                            when !addButton.IsShown:
                             addButton.Show();
                             break;
                     }

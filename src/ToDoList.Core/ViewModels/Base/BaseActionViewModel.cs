@@ -16,6 +16,7 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
     where TResult : class
 {
     private readonly IMapper _mapper;
+
     public IMvxAsyncCommand ActionCommand { get; }
 
     public CompositeDisposable CompositeDisposable { get; } = new ();
@@ -27,12 +28,14 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
     {
         _mapper = mapper;
 
+        // TODO How it works? OnResultSet, OnAfterMap
         ActionCommand = new MvxAsyncCommand(() =>
                 RunSafeTaskAsync(() => NavigationService.Close(this, OnResultSet(_mapper.Map(this, CurrentToDoList,
                     o => o.AfterMap((_, d) => OnAfterMap(d.Item)))))),
             () => IsValid);
     }
 
+    // TODO Validation in UI?
     [Reactive]
     [Required]
     [Observe]
@@ -56,8 +59,10 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
     {
         if (viewFinishing)
         {
+            // TODO .Dispose() ?
             CompositeDisposable.Clear();
         }
+
         base.ViewDestroy(viewFinishing);
     }
 

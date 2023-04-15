@@ -17,6 +17,7 @@ using UIKit;
 
 namespace ToDoList.iOS.Sources;
 
+// TODO MvxTableViewSource ?
 public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
 {
     private readonly IReadOnlyDictionary<ToDoListItemType, string> _toDoListItemTypesToIdentifierMapper
@@ -109,48 +110,49 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
             _disposable?.Dispose();
             _disposable = null;
         }
+
         base.Dispose(disposing);
     }
 
     private void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
-		switch (e.Action)
-		{
-			case NotifyCollectionChangedAction.Add:
-				if (e.NewStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                if (e.NewStartingIndex == -1)
+                    goto case NotifyCollectionChangedAction.Reset;
 
-				InsertRows(e.NewStartingIndex, e.NewItems.Count);
+                InsertRows(e.NewStartingIndex, e.NewItems.Count);
 
-				break;
+                break;
 
-			case NotifyCollectionChangedAction.Remove:
-				if (e.OldStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldStartingIndex == -1)
+                    goto case NotifyCollectionChangedAction.Reset;
 
-				DeleteRows(e.OldStartingIndex, e.OldItems.Count);
+                DeleteRows(e.OldStartingIndex, e.OldItems.Count);
 
-				break;
+                break;
 
-			case NotifyCollectionChangedAction.Move:
-				if (e.OldStartingIndex == -1 || e.NewStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
+            case NotifyCollectionChangedAction.Move:
+                if (e.OldStartingIndex == -1 || e.NewStartingIndex == -1)
+                    goto case NotifyCollectionChangedAction.Reset;
 
-				MoveRows(e.NewStartingIndex, e.OldStartingIndex, e.OldItems.Count);
+                MoveRows(e.NewStartingIndex, e.OldStartingIndex, e.OldItems.Count);
 
-				break;
+                break;
 
-			case NotifyCollectionChangedAction.Replace:
-				if (e.OldStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
+            case NotifyCollectionChangedAction.Replace:
+                if (e.OldStartingIndex == -1)
+                    goto case NotifyCollectionChangedAction.Reset;
 
-				ReloadRows(e.OldStartingIndex, e.OldItems.Count);
+                ReloadRows(e.OldStartingIndex, e.OldItems.Count);
 
-				break;
+                break;
 
-			case NotifyCollectionChangedAction.Reset:
-				ReloadData();
-				return;
+            case NotifyCollectionChangedAction.Reset:
+                ReloadData();
+                return;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -182,6 +184,7 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
     private void MoveRows(int newStartingIndex, int oldStartingIndex, int oldItemsCount)
     {
         TableView.BeginUpdates();
+
         for (var i = 0; i < oldItemsCount; i++)
         {
             var oldIndex = oldStartingIndex;
@@ -195,9 +198,9 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
 
             TableView.MoveRow(NSIndexPath.FromRowSection(oldIndex, 0), NSIndexPath.FromRowSection(newIndex, 0));
         }
+
         TableView.EndUpdates();
     }
-
 
     private static NSIndexPath[] GetPaths(int index, int count)
     {

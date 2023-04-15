@@ -75,7 +75,6 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
 
         _titleField.AttributedPlaceholder = new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
 
-
         var titlePaddingView = new UIView(new CGRect(0, 0, 16, 0));
         _titleField.LeftView = titlePaddingView;
         _titleField.RightView = titlePaddingView;
@@ -83,11 +82,13 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
         _titleField.RightViewMode = UITextFieldViewMode.Always;
         _titleField.ShouldReturn = OnShouldReturn;
 
+        // TODO MinimumOSVersion ?
         if (_moreThan11 = UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
         {
             _titleField.Layer.CornerRadius = 4;
             _titleField.Layer.MaskedCorners = CACornerMask.MinXMinYCorner | CACornerMask.MaxXMinYCorner;
         }
+
         _titleField.Layer.MasksToBounds = true;
 
         _contentView.Add(_descriptionStack = new UIStackView
@@ -174,7 +175,8 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
 
         var safeAreaGuide = View.SafeAreaLayoutGuide;
 
-        NSLayoutConstraint.ActivateConstraints(new []
+        // TODO Why native constraints + fluent layout constraints ?
+        NSLayoutConstraint.ActivateConstraints(new[]
         {
             // _scrollView
             _scrollView.BottomAnchor.ConstraintEqualTo(safeAreaGuide.BottomAnchor),
@@ -194,7 +196,6 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
             _contentView.AtLeadingOf(_scrollView),
             _contentView.AtTrailingOf(_scrollView),
             _contentView.AtBottomOf(_scrollView),
-
             _contentView.WithSameWidth(_scrollView),
             _contentView.WithSameHeight(_scrollView),
 
@@ -278,6 +279,7 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
     public override void ViewWillLayoutSubviews()
     {
         base.ViewWillLayoutSubviews();
+
         if (_moreThan11)
         {
             return;

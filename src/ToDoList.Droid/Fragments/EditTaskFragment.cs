@@ -43,6 +43,7 @@ public class EditTaskFragment : BaseMenuFragment<EditTaskViewModel>
             segmentedControl.AddView(radioButton);
         }
 
+        // TODO CreateBindingSet() ?
         var set = this.CreateBindingSet<EditTaskFragment, EditTaskViewModel>();
 
         set

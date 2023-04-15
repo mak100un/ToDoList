@@ -4,6 +4,7 @@ using CoreGraphics;
 using Foundation;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using ToDoList.Core.Definitions.Converters;
 using ToDoList.Core.ViewModels.Items;
 using ToDoList.iOS.Definitions.Converters;
@@ -12,6 +13,7 @@ using UIKit;
 
 namespace ToDoList.iOS.Cells;
 
+// TODO MvxTableViewCell ?
 public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
 {
     public ToDoListItemCell(IntPtr intPtr)

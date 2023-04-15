@@ -13,6 +13,7 @@ public class ToDoListItemDalModel
     
     public ToDoTaskStatus Status { get; set; }
     
+    // TODO Required? Notnull
     public DateTime? CreatedAt { get; set; }
     
     public DateTime? UpdatedAt { get; set; }

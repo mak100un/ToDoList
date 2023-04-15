@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <resources>
     <!-- Base theme applied regardless of API level -->
-    <style name="AppTheme.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme.Base"
+           parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/accentColor</item>
         <item name="colorPrimaryVariant">@color/primaryColor</item>
         <item name="colorOnPrimary">#FFFFFF</item>
@@ -21,24 +23,29 @@
     </style>
 
     <!-- Default App theme applied if no resource style overrides for specific API level -->
-    <style name="AppTheme" parent="AppTheme.Base">
+    <style name="AppTheme"
+           parent="AppTheme.Base">
     </style>
 
     <!-- App Splash Screen Theme -->
-    <style name="AppTheme.Splash.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Splash.Base"
+           parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
     <!-- Default Splash Screen theme applied if no resource style overrides for specific API level -->
-    <style name="AppTheme.Splash" parent="AppTheme.Splash.Base">
+    <style name="AppTheme.Splash"
+           parent="AppTheme.Splash.Base">
     </style>
 
+    <!--    TODO Purpose?-->
     <style name="ZeroStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
     </style>
 
-    <style name="ActionButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+    <style name="ActionButtonStyle"
+           parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="backgroundTint">@drawable/action_button_color_states</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -54,7 +61,8 @@
         <item name="android:textSize">@dimen/body_text_size</item>
     </style>
 
-    <style name="TextInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
+    <style name="TextInputStyle"
+           parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="hintTextColor">@color/placeholder_color</item>

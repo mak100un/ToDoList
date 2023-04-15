@@ -44,6 +44,8 @@ namespace ToDoList.Core.ViewModels
             : base(logger)
         {
             _mapper = mapper;
+
+            // TODO DI ?
             _toDoListRepository = new Lazy<IToDoListRepository>(Mvx.IoCProvider.Resolve<IToDoListRepository>);
 
             EditTaskCommand = new MvxAsyncCommand<ToDoListItemViewModel>(toDoListItem => RunSafeTaskAsync(async () =>
@@ -80,26 +82,26 @@ namespace ToDoList.Core.ViewModels
             }));
 
             LoadMoreCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(async () =>
-            {
-                IsLoadingMore = true;
-
-                // Simulate loading
-                await Task.Delay(2500);
-                var newItems = _toDoListRepository.Value.GetItems(ToDoListItemsCount, PAGE_SIZE)?.ToArray();
-
-                if (newItems?.Length > 0)
                 {
-                    Items.AddRange(_mapper.Map<IEnumerable<ToDoListItemViewModel>>(newItems));
-                }
+                    IsLoadingMore = true;
 
-                IsLoadMoreEnabled = newItems?.Length >= PAGE_SIZE;
-                IsLoadingMore = false;
-            },
-            ex =>
-            {
-                IsLoadMoreEnabled = false;
-                IsLoadingMore = false;
-            }),() => IsLoadMoreEnabled && !IsLoadingMore);
+                    // Simulate loading
+                    await Task.Delay(2500);
+                    var newItems = _toDoListRepository.Value.GetItems(ToDoListItemsCount, PAGE_SIZE)?.ToArray();
+
+                    if (newItems?.Length > 0)
+                    {
+                        Items.AddRange(_mapper.Map<IEnumerable<ToDoListItemViewModel>>(newItems));
+                    }
+
+                    IsLoadMoreEnabled = newItems?.Length >= PAGE_SIZE;
+                    IsLoadingMore = false;
+                },
+                ex =>
+                {
+                    IsLoadMoreEnabled = false;
+                    IsLoadingMore = false;
+                }), () => IsLoadMoreEnabled && !IsLoadingMore);
 
             Items
                 .ObserveCollectionChanges()
@@ -126,9 +128,11 @@ namespace ToDoList.Core.ViewModels
                     return;
                 }
 
+                // TODO switch for bool ? :)
                 switch (value)
                 {
                     case true:
+                        // TODO How to keep only task items in Items collection, but keep loader at the bottom?
                         Items.Add(new LoadingViewModel());
                         break;
                     default:
@@ -148,22 +152,27 @@ namespace ToDoList.Core.ViewModels
         [Reactive]
         public State State { get; private set; }
 
+        // TODO private property ?
         private int ToDoListItemsCount => _isLoadingMore ? Items.Count - 1 : Items.Count;
 
-        public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; } = new();
+        // TODO Why concurrent?
+        public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; } = new ();
 
         public override async Task Initialize()
         {
             await base.Initialize();
 
+            // TODO What if I don't want to wait for Initialize() ?
             await RunSafeTaskAsync(async () =>
             {
+                // TODO Could this loading-tasks-logic be simplified?
+
                 var newItems = _toDoListRepository.Value.GetItems(ToDoListItemsCount, PAGE_SIZE)?.ToArray();
 
                 var anyItems = newItems?.Length > 0;
+
                 if (anyItems)
                 {
-
                     Items.AddRange(_mapper.Map<IEnumerable<ToDoListItemViewModel>>(newItems));
                 }
 

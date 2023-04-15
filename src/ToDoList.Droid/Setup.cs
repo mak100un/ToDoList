@@ -30,6 +30,10 @@ namespace ToDoList.Droid
         {
             base.FillTargetFactories(registry);
 
+            // TODO registry.RegisterCustomBindingFactory<>()
+            // TODO Using strings ("TextColor") is impractical
+            
+            // TODO MvxImageViewResourceNameTargetBinding
             registry.RegisterFactory(new MvxCustomBindingFactory<ImageView>("DrawableResourceId", imageView => new ImageViewDrawableIdTargetBinding(imageView)));
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("TextColor", textView => new TextViewTextColorTargetBinding(textView)));
             registry.RegisterFactory(new MvxCustomBindingFactory<View>("Background", view => new ViewBackgroundTargetBinding(view)));

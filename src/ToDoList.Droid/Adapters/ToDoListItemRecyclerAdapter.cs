@@ -19,6 +19,7 @@ public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter
     {
         var itemAtPosition = GetItem(position);
 
+        // TODO MvxTemplateSelector
         return (itemAtPosition as BaseToDoListItemViewModel)?.ItemType switch
         {
             ToDoListItemType.Task => Resource.Layout.todo_list_item_template,

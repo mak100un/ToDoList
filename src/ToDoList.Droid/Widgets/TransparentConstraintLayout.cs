@@ -7,6 +7,7 @@ using AndroidX.ConstraintLayout.Widget;
 
 namespace ToDoList.Droid.Widgets;
 
+// TODO Purpose ?
 public class TransparentConstraintLayout : ConstraintLayout
 {
     protected TransparentConstraintLayout(IntPtr javaReference, JniHandleOwnership transfer)

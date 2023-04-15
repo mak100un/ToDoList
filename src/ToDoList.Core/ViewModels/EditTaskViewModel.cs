@@ -32,6 +32,7 @@ namespace ToDoList.Core.ViewModels
             ILogger<EditTaskViewModel> logger)
             : base(mapper, logger)
         {
+            // TODO DI ?
             _dialogService = new Lazy<IDialogService>(Mvx.IoCProvider.Resolve<IDialogService>);
 
             ToolbarCommand = new MvxAsyncCommand(() =>

@@ -19,6 +19,7 @@ public class ToDoListItemRecyclerViewHolder : MvxRecyclerViewHolder
 {
     private readonly CompositeDisposable _compositeDisposable = new ();
 
+    // TODO click - Adapter.ItemClick ; MvxRecyclerViewHolder.OnItemViewClick
     public ToDoListItemRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context, ICommand itemClick)
         : base(itemView, context)
     {
@@ -75,6 +76,7 @@ public class ToDoListItemRecyclerViewHolder : MvxRecyclerViewHolder
         {
             _compositeDisposable?.Clear();
         }
+
         base.Dispose(disposing);
     }
 }

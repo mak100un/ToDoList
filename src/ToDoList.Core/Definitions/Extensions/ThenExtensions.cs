@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace ToDoList.Core.Definitions.Extensions;
 
+// TODO Any of them being used?
 public static class ThenExtensions
 {
     public static TOut ThenIfNotEmpty<TIn, TOut>(this IEnumerable<TIn> @in, Func<IEnumerable<TIn>, TOut> action)

@@ -19,6 +19,7 @@ namespace ToDoList.Core.ViewModels.Base
             Logger = logger;
         }
 
+        // TODO Why inject over ctor ?
         [MvxInject]
         public IMvxNavigationService NavigationService { get; set; }
 
@@ -107,6 +108,8 @@ namespace ToDoList.Core.ViewModels.Base
         }
 
         private MvxNotifyTask _initializeTask;
+
+        // TODO Where is used?
         public MvxNotifyTask InitializeTask
         {
             get => _initializeTask;

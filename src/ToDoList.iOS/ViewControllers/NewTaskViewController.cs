@@ -29,6 +29,8 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
     public override void ViewWillAppear(bool animated)
     {
         base.ViewWillAppear(animated);
+
+        // TODO Already in CreateView() ?
         _scrollView?.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 
@@ -61,7 +63,7 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
             ReturnKeyType = UIReturnKeyType.Done,
         });
 
-        _titleField.AttributedPlaceholder =  new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
+        _titleField.AttributedPlaceholder = new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
 
         var titlePaddingView = new UIView(new CGRect(0, 0, 16, 0));
         _titleField.LeftView = titlePaddingView;
@@ -75,6 +77,7 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
             _titleField.Layer.CornerRadius = 4;
             _titleField.Layer.MaskedCorners = CACornerMask.MinXMinYCorner | CACornerMask.MaxXMinYCorner;
         }
+
         _titleField.Layer.MasksToBounds = true;
 
         _contentView.Add(_descriptionStack = new UIStackView
@@ -116,7 +119,7 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
 
         var safeAreaGuide = View.SafeAreaLayoutGuide;
 
-        NSLayoutConstraint.ActivateConstraints(new []
+        NSLayoutConstraint.ActivateConstraints(new[]
         {
             // _scrollView
             _scrollView.BottomAnchor.ConstraintEqualTo(safeAreaGuide.BottomAnchor),
@@ -138,7 +141,6 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
             _contentView.AtLeadingOf(_scrollView),
             _contentView.AtTrailingOf(_scrollView),
             _contentView.AtBottomOf(_scrollView),
-
             _contentView.WithSameWidth(_scrollView),
             _contentView.WithSameHeight(_scrollView),
 
@@ -191,6 +193,7 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
     public override void ViewWillLayoutSubviews()
     {
         base.ViewWillLayoutSubviews();
+
         if (_moreThan11)
         {
             return;

@@ -52,6 +52,7 @@ public class SegmentedControl : RadioGroup, INotifyPropertyChanged
         {
             _compositeDisposable?.Clear();
         }
+
         base.Dispose(disposing);
     }
 
