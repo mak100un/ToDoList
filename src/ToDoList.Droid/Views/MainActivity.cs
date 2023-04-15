@@ -1,4 +1,3 @@
-using System.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -8,7 +7,6 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using ToDoList.Core.Definitions.Constants;
 using ToDoList.Core.Services.Interfaces;
 using ToDoList.Core.ViewModels.Extra;
-using ToDoList.Droid.Fragments;
 
 namespace ToDoList.Droid.Views
 {
@@ -39,7 +37,7 @@ namespace ToDoList.Droid.Views
 
         public override async void OnBackPressed()
         {
-            if (Fragments?.FirstOrDefault() is not ToDoListFragment)
+            if (SupportFragmentManager?.BackStackEntryCount > 1)
             {
                 base.OnBackPressed();
                 return;
