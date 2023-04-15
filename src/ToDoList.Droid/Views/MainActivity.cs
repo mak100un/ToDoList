@@ -1,9 +1,14 @@
+using System.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using ToDoList.Core.Definitions.Constants;
+using ToDoList.Core.Services.Interfaces;
 using ToDoList.Core.ViewModels.Extra;
+using ToDoList.Droid.Fragments;
 
 namespace ToDoList.Droid.Views
 {
@@ -16,6 +21,8 @@ namespace ToDoList.Droid.Views
         WindowSoftInputMode = SoftInput.AdjustPan)]
     public class MainActivity : BaseActivity<MainViewModel>
     {
+        private const string EXIT_APP_MESSAGE = "Are you want to exit application?";
+
         protected override int ActivityLayoutId => Resource.Layout.activity_main_container;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -28,6 +35,23 @@ namespace ToDoList.Droid.Views
         {
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        public override async void OnBackPressed()
+        {
+            if (Fragments?.FirstOrDefault() is not ToDoListFragment)
+            {
+                base.OnBackPressed();
+                return;
+            }
+
+            if (!await Mvx.IoCProvider.Resolve<IDialogService>().DisplayAlertAsync(null, EXIT_APP_MESSAGE,
+                    MessageConstants.YES_MESSAGE, MessageConstants.NO_MESSAGE))
+            {
+                return;
+            }
+
+            Process.KillProcess(Process.MyPid());
         }
     }
 }
