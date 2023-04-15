@@ -59,7 +59,8 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
             {
                 itemsView = LayoutInflater.Inflate(Resource.Layout.to_do_list_items_view, stateContainer, false);
                 var mvxRecyclerView = itemsView.FindViewById<MvxRecyclerView>(Resource.Id.items_recycler);
-                mvxRecyclerView.SetAdapter(new ToDoListItemRecyclerAdapter(BindingContext as IMvxAndroidBindingContext));
+                var adapter = new ToDoListItemRecyclerAdapter(BindingContext as IMvxAndroidBindingContext, () => mvxRecyclerView?.SmoothScrollToPosition(0));
+                mvxRecyclerView.SetAdapter(adapter);
 
                 var addButton = itemsView.FindViewById<FloatingActionButton>(Resource.Id.add_button);
 
@@ -69,6 +70,11 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
                 var set = this.CreateBindingSet<ToDoListFragment, ToDoListViewModel>();
 
                 set
+                    .Bind(adapter)
+                    .For(v => v.Items)
+                    .To(vm => vm.Items);
+
+                set
                     .Bind(mvxRecyclerView)
                     .For(v => v.ItemsSource)
                     .To(vm => vm.Items);
@@ -76,6 +82,11 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
                 set
                     .Bind(mvxRecyclerView)
                     .For(v => v.ItemClick)
+                    .To(vm => vm.EditTaskCommand);
+
+                set
+                    .Bind(mvxRecyclerView)
+                    .For(v => v.ItemLongClick)
                     .To(vm => vm.EditTaskCommand);
 
                 set.Bind(scrollListener)

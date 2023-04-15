@@ -93,7 +93,6 @@
     <Compile Include="Widgets\ScrollableTextInputEditText.cs" />
     <Compile Include="Widgets\SegmentedControl.cs" />
     <Compile Include="Widgets\StateContainer.cs" />
-    <Compile Include="Widgets\TransparentConstraintLayout.cs" />
   </ItemGroup>
 
   <ItemGroup>

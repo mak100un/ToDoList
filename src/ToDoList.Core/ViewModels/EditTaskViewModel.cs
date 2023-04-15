@@ -8,6 +8,7 @@ using MvvmCross.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ToDoList.Core.Definitions.Attributes;
+using ToDoList.Core.Definitions.Constants;
 using ToDoList.Core.Definitions.DalModels;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Definitions.Models;
@@ -21,8 +22,6 @@ namespace ToDoList.Core.ViewModels
     public sealed class EditTaskViewModel : BaseActionViewModel<EditTaskResult>, IBaseToolbarViewModel
     {
         private const string DELETE_TASK_MESSAGE = "Are you sure to delete this task?";
-        private const string YES_MESSAGE = "Yes";
-        private const string NO_MESSAGE = "No";
 
         private readonly Lazy<IDialogService> _dialogService;
         public IMvxAsyncCommand ToolbarCommand { get; }
@@ -38,7 +37,7 @@ namespace ToDoList.Core.ViewModels
             ToolbarCommand = new MvxAsyncCommand(() =>
                     RunSafeTaskAsync(async () =>
                     {
-                        if (!await _dialogService.Value.DisplayAlertAsync(null, DELETE_TASK_MESSAGE, YES_MESSAGE, NO_MESSAGE))
+                        if (!await _dialogService.Value.DisplayAlertAsync(null, DELETE_TASK_MESSAGE, MessageConstants.YES_MESSAGE, MessageConstants.NO_MESSAGE))
                         {
                             return;
                         }

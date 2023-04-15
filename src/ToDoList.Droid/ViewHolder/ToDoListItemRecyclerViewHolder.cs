@@ -17,27 +17,18 @@ namespace ToDoList.Droid.ViewHolder;
 
 public class ToDoListItemRecyclerViewHolder : MvxRecyclerViewHolder
 {
-    private readonly CompositeDisposable _compositeDisposable = new ();
-
     // TODO click - Adapter.ItemClick ; MvxRecyclerViewHolder.OnItemViewClick
-    public ToDoListItemRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context, ICommand itemClick)
+    public ToDoListItemRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context)
         : base(itemView, context)
     {
         var toDoListItemTitleView = itemView.FindViewById<TextView>(Resource.Id.todo_list_item_title_view);
         var toDoListItemStatusView = itemView.FindViewById<TextView>(Resource.Id.todo_list_item_status_view);
-        var toDoListItemBackgroundLayout = itemView.FindViewById<ConstraintLayout>(Resource.Id.todo_list_item_background_layout);
-
-        Observable.FromEventPattern<EventHandler, EventArgs>(
-                h => toDoListItemBackgroundLayout.Click += h,
-                h => toDoListItemBackgroundLayout.Click -= h)
-            .Select(_ => DataContext)
-            .InvokeCommand(itemClick);
 
         this.DelayBind(() =>
         {
             var set = this.CreateBindingSet<ToDoListItemRecyclerViewHolder, ToDoListItemViewModel>();
 
-            set.Bind(toDoListItemBackgroundLayout)
+            set.Bind(itemView.FindViewById<ConstraintLayout>(Resource.Id.todo_list_item_background_layout))
                 .For("Background")
                 .To(vm => vm.Status)
                 .WithConversion<StatusToBackgroundConverter>();
@@ -68,15 +59,5 @@ public class ToDoListItemRecyclerViewHolder : MvxRecyclerViewHolder
 
             set.Apply();
         });
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _compositeDisposable?.Clear();
-        }
-
-        base.Dispose(disposing);
     }
 }

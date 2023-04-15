@@ -4,10 +4,9 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:clickable="true"
-              android:background="@drawable/todo_item_background"
-              android:id="@+id/todo_list_item_background">
+              android:background="@drawable/todo_item_background">
 
-    <ToDoList.Droid.Widgets.TransparentConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:layout_marginVertical="10dp"
@@ -53,6 +52,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/todo_list_item_image_view"/>
 
-    </ToDoList.Droid.Widgets.TransparentConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
