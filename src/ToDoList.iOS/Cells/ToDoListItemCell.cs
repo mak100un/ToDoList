@@ -5,6 +5,8 @@ using Foundation;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.BindingContext;
 using ToDoList.Core.Definitions.Converters;
+using ToDoList.Core.Definitions.Enums;
+using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Core.ViewModels.Items;
 using ToDoList.iOS.Definitions.Converters;
 using ToDoList.iOS.Styles;
@@ -40,6 +42,10 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
 
     private void InitCell()
     {
+        Func<ToDoTaskStatus, UIColor> statusToBackgroundColorConverter = StatusToBackgroundColorConverter;
+        Func<ToDoTaskStatus, UIColor> statusToTextColorConverter = StatusToTextColorConverter;
+        Func<ToDoTaskStatus, UIImage> statusToImageConverter = StatusToImageConverter;
+
         var titleLabel = new UILabel
         {
             TextAlignment = UITextAlignment.Left,
@@ -75,12 +81,6 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
 
         Add(container);
 
-        NSLayoutConstraint.ActivateConstraints(new[]
-        {
-            statusLabel.LeadingAnchor.ConstraintGreaterThanOrEqualTo(titleLabel.TrailingAnchor, 12),
-            statusImage.LeadingAnchor.ConstraintGreaterThanOrEqualTo(statusLabel.TrailingAnchor, 8),
-        });
-
         this.AddConstraints(
             // container
             container.AtLeadingOf(this, 20),
@@ -96,11 +96,13 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
             // statusLabel
             statusLabel.AtTopOf(container, 12),
             statusLabel.AtBottomOf(container, 12),
+            statusLabel.Leading().GreaterThanOrEqualTo(12).TrailingOf(titleLabel),
 
             // statusLabel
             statusImage.AtTopOf(container, 12),
             statusImage.AtBottomOf(container, 12),
-            statusImage.AtTrailingOf(container, 20)
+            statusImage.AtTrailingOf(container, 20),
+            statusImage.Leading().GreaterThanOrEqualTo(8).TrailingOf(statusLabel)
         );
 
         this.DelayBind(() =>
@@ -114,27 +116,27 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
             set.Bind(statusLabel)
                 .For(x => x.Text)
                 .To(vm => vm.Status)
-                .WithConversion<StatusToTextConverter>();
+                .WithGenericConversion((ToDoTaskStatus value) => value.ToString().ToUpper());
 
             set.Bind(statusImage)
                 .For(x => x.Image)
                 .To(vm => vm.Status)
-                .WithConversion<StatusToImageConverter>();
+                .WithGenericConversion(statusToImageConverter);
 
             set.Bind(titleLabel)
                 .For(x => x.TextColor)
                 .To(vm => vm.Status)
-                .WithConversion<StatusToTextColorConverter>();
+                .WithGenericConversion(statusToTextColorConverter);
 
             set.Bind(statusLabel)
                 .For(x => x.TextColor)
                 .To(vm => vm.Status)
-                .WithConversion<StatusToTextColorConverter>();
+                .WithGenericConversion(statusToTextColorConverter);
 
             set.Bind(container)
                 .For(x => x.BackgroundColor)
                 .To(vm => vm.Status)
-                .WithConversion<StatusToBackgroundColorConverter>();
+                .WithGenericConversion(statusToBackgroundColorConverter);
 
             set.Apply();
         });
@@ -142,4 +144,26 @@ public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
         container.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
+
+    private static UIColor StatusToBackgroundColorConverter(ToDoTaskStatus value)
+        => value switch
+        {
+            ToDoTaskStatus.Done => ColorPalette.DisabledBackgroundColor,
+            _ => ColorPalette.PrimaryButton,
+        };
+
+    private static UIColor StatusToTextColorConverter(ToDoTaskStatus value)
+        => value switch
+        {
+            ToDoTaskStatus.Done => ColorPalette.DisabledTextColor,
+            _ => ColorPalette.Primary,
+        };
+
+    private static UIImage StatusToImageConverter(ToDoTaskStatus value)
+        => value switch
+        {
+            ToDoTaskStatus.Done => UIImage.FromBundle(nameof(ToDoTaskStatus.Done)),
+            ToDoTaskStatus.InProgress => UIImage.FromBundle(nameof(ToDoTaskStatus.InProgress)),
+            ToDoTaskStatus.ToDo => UIImage.FromBundle(nameof(ToDoTaskStatus.ToDo)),
+        };
 }

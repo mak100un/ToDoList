@@ -7,20 +7,20 @@ using MvvmCross.Commands;
 using ReactiveUI.Fody.Helpers;
 using ToDoList.Core.Definitions.Attributes;
 using ToDoList.Core.Definitions.DalModels;
+using ToDoList.Core.ViewModels.Interfaces;
 using ToDoList.Core.ViewModels.Items;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace ToDoList.Core.ViewModels.Base;
 
-public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoListItemViewModel, TResult>, IBaseActionViewModel
-    where TResult : class
+public abstract class BasePageTitledActionViewModel : BasePageTitledResultViewModel<ToDoListItemViewModel, ToDoListItemViewModel>, IBaseActionViewModel
 {
     private readonly IMapper _mapper;
     public IMvxAsyncCommand ActionCommand { get; }
 
     public CompositeDisposable CompositeDisposable { get; } = new ();
 
-    public BaseActionViewModel(
+    public BasePageTitledActionViewModel(
         IMapper mapper,
         ILogger logger)
         : base(logger)
@@ -63,7 +63,7 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
 
     protected abstract void OnAfterMap(ToDoListItemDalModel toDoListItemDalModel);
 
-    protected abstract TResult OnResultSet(ToDoListItemViewModel item);
+    protected virtual ToDoListItemViewModel OnResultSet(ToDoListItemViewModel item) => item;
 
     private static bool Validate(object @object)
     {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LiteDB;
-using MvvmCross;
 using ToDoList.Core.Definitions.DalModels;
 using ToDoList.Core.Repositories.Interfaces;
 
@@ -16,7 +15,10 @@ namespace ToDoList.Core.Repositories
 
         private ILiteCollection<ToDoListItemDalModel> DbCollection => _dbCollection ??= _liteDatabase.Value.GetCollection<ToDoListItemDalModel>();
 
-        public ToDoListRepository() => _liteDatabase = new Lazy<ILiteDatabase>(Mvx.IoCProvider.Resolve<ILiteDatabase>);
+        public ToDoListRepository(Lazy<ILiteDatabase> liteDatabase)
+        {
+            _liteDatabase = liteDatabase;
+        }
 
         public IEnumerable<ToDoListItemDalModel> GetItems(int offset, int limit) => DbCollection.FindAll().OrderByDescending(item => item.CreatedAt).Skip(offset).Take(limit).ToArray();
 

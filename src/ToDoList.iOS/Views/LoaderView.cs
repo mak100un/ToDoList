@@ -1,24 +1,17 @@
 using System;
 using Cirrious.FluentLayouts.Touch;
-using CoreFoundation;
 using CoreGraphics;
-using Foundation;
 using ToDoList.iOS.Styles;
 using UIKit;
 
-namespace ToDoList.iOS.Cells;
+namespace ToDoList.iOS.Views;
 
-public class LoaderCell : UITableViewCell
+public class LoaderView : UITableViewHeaderFooterView
 {
     private UIActivityIndicatorView _indicator;
 
-    public LoaderCell(IntPtr intPtr)
-        : base(intPtr)
-    {
-        InitCell();
-    }
-
-    private void InitCell()
+    public LoaderView(IntPtr intPtr)
+    : base(intPtr)
     {
         _indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Medium)
         {
@@ -27,8 +20,6 @@ public class LoaderCell : UITableViewCell
             Transform = CGAffineTransform.MakeScale(1.5f, 1.5f)
         };
         Add(_indicator);
-
-        StartAnimating();
 
         this.AddConstraints(
 
@@ -42,7 +33,9 @@ public class LoaderCell : UITableViewCell
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 
-    public void StartAnimating() => DispatchQueue.MainQueue.DispatchAsync(() => _indicator?.StartAnimating());
+    public void StartAnimating() => _indicator?.StartAnimating();
+
+    public void StopAnimating() => _indicator?.StopAnimating();
 
     protected override void Dispose(bool disposing)
     {

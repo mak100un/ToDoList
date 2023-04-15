@@ -10,7 +10,7 @@ using UIKit;
 namespace ToDoList.iOS.ViewControllers;
 
 public abstract class BaseViewController<TViewModel> : MvxViewController<TViewModel>
-    where TViewModel : class, IBaseViewModel
+    where TViewModel : class, IBasePageTitledViewModel
 {
     public override void ViewDidLoad()
     {
@@ -39,29 +39,20 @@ public abstract class BaseViewController<TViewModel> : MvxViewController<TViewMo
             NavigationController.NavigationBar.Add(bottomLine);
 
 
-            NSLayoutConstraint.ActivateConstraints(new[]
-            {
-                bottomLine.TopAnchor.ConstraintGreaterThanOrEqualTo(NavigationController.NavigationBar.TopAnchor),
-                bottomLine.HeightAnchor.ConstraintEqualTo(0.5f),
-            });
-
             NavigationController.NavigationBar.AddConstraints(
                 // _bottomLine
                 bottomLine.AtLeadingOf(NavigationController.NavigationBar),
                 bottomLine.AtTrailingOf(NavigationController.NavigationBar),
-                bottomLine.AtBottomOf(NavigationController.NavigationBar)
+                bottomLine.AtBottomOf(NavigationController.NavigationBar),
+                bottomLine.Top().GreaterThanOrEqualTo().TopOf(NavigationController.NavigationBar),
+                bottomLine.Height().EqualTo(0.5f)
             );
         }
 
         CreateView();
+        View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
         LayoutView();
         BindView();
-    }
-
-    public override void ViewWillAppear(bool animated)
-    {
-        base.ViewWillAppear(animated);
-        View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 
     protected virtual void CreateView()

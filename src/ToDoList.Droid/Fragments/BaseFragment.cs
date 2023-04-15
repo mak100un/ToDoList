@@ -15,7 +15,7 @@ using ToDoList.Droid.Extensions;
 namespace ToDoList.Droid.Fragments;
 
 public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
-    where TViewModel : BaseViewModel
+    where TViewModel : BasePageTitledViewModel
 {
     private MaterialToolbar _toolbar;
     protected abstract int ResourceId { get; }

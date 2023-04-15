@@ -6,11 +6,10 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ToDoList.Core.Definitions.DalModels;
 using ToDoList.Core.ViewModels.Base;
-using ToDoList.Core.ViewModels.Items;
 
 namespace ToDoList.Core.ViewModels
 {
-    public sealed class NewTaskViewModel : BaseActionViewModel<ToDoListItemViewModel>
+    public sealed class NewTaskViewModel : BasePageTitledActionViewModel
     {
         public NewTaskViewModel(
             IMapper mapper,
@@ -26,6 +25,5 @@ namespace ToDoList.Core.ViewModels
         public override string PageTitle => "New task";
 
         protected override void OnAfterMap(ToDoListItemDalModel toDoListItemDalModel) => toDoListItemDalModel.CreatedAt = DateTime.Now;
-        protected override ToDoListItemViewModel OnResultSet(ToDoListItemViewModel item) => item;
     }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using ToDoList.Core.Definitions.DalModels;
 using ToDoList.Core.ViewModels;
 using ToDoList.Core.ViewModels.Base;
+using ToDoList.Core.ViewModels.Interfaces;
 using ToDoList.Core.ViewModels.Items;
 
 namespace ToDoList.Core;

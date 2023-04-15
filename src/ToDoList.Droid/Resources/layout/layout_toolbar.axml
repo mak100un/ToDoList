@@ -7,4 +7,4 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryVariant"
         android:elevation="@dimen/primary_elevation"
-        app:MvxBind="Title PageTitle"/>
+        app:MvxBind="TitleCentered PageTitle"/>

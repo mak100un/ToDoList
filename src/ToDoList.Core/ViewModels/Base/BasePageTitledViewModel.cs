@@ -12,9 +12,9 @@ using ToDoList.Core.ViewModels.Interfaces;
 
 namespace ToDoList.Core.ViewModels.Base
 {
-    public abstract class BaseViewModel : ReactiveObject, IBaseViewModel
+    public abstract class BasePageTitledViewModel : ReactiveObject, IBasePageTitledViewModel
     {
-        protected BaseViewModel(ILogger logger)
+        protected BasePageTitledViewModel(ILogger logger)
         {
             Logger = logger;
         }

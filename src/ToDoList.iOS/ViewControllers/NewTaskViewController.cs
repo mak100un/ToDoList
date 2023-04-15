@@ -1,4 +1,3 @@
-using System.Drawing;
 using Cirrious.FluentLayouts.Touch;
 using CoreAnimation;
 using CoreGraphics;
@@ -25,12 +24,6 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
     private UIButton _actionButton;
     private UIView _contentView;
     private bool _moreThan11;
-
-    public override void ViewWillAppear(bool animated)
-    {
-        base.ViewWillAppear(animated);
-        _scrollView?.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
-    }
 
     protected override void CreateView()
     {
@@ -114,25 +107,19 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
     {
         base.LayoutView();
 
-        var safeAreaGuide = View.SafeAreaLayoutGuide;
-
-        NSLayoutConstraint.ActivateConstraints(new []
-        {
-            // _scrollView
-            _scrollView.BottomAnchor.ConstraintEqualTo(safeAreaGuide.BottomAnchor),
-            _scrollView.TopAnchor.ConstraintEqualTo(TopLayoutGuide.GetBottomAnchor()),
-            _scrollView.LeadingAnchor.ConstraintEqualTo(safeAreaGuide.LeadingAnchor),
-            _scrollView.TrailingAnchor.ConstraintEqualTo(safeAreaGuide.TrailingAnchor),
-            _titleField.HeightAnchor.ConstraintEqualTo(44),
-
-            _descriptionView.HeightAnchor.ConstraintEqualTo(200),
-
-            _actionButton.TopAnchor.ConstraintGreaterThanOrEqualTo(_descriptionStack.BottomAnchor, 54),
-
-            _actionButton.HeightAnchor.ConstraintEqualTo(55),
-        });
-
         View.AddConstraints(
+            // _titleField
+            _titleField.Height().EqualTo(44),
+
+            // _descriptionView
+            _descriptionView.Height().EqualTo(200),
+
+            // _scrollView
+            _scrollView.AtBottomOfSafeArea(View),
+            _scrollView.AtTopOfSafeArea(View),
+            _scrollView.AtLeadingOf(View),
+            _scrollView.ToTrailingOf(View),
+
             // _contentView
             _contentView.AtTopOf(_scrollView),
             _contentView.AtLeadingOf(_scrollView),
@@ -155,7 +142,9 @@ public class NewTaskViewController : BaseViewController<NewTaskViewModel>
             // _itemInfoStack
             _actionButton.AtLeadingOf(_contentView, 20),
             _actionButton.AtTrailingOf(_contentView, 20),
-            _actionButton.AtBottomOf(_contentView, 54)
+            _actionButton.AtBottomOf(_contentView, 54),
+            _actionButton.Top().GreaterThanOrEqualTo(54).BottomOf(_descriptionStack),
+            _actionButton.Height().EqualTo(55)
         );
     }
 

@@ -16,7 +16,7 @@ namespace ToDoList.Droid.Views
         Label = "@string/app_name",
         ScreenOrientation = ScreenOrientation.Portrait,
         LaunchMode = LaunchMode.SingleTask,
-        WindowSoftInputMode = SoftInput.AdjustPan)]
+        WindowSoftInputMode = SoftInput.AdjustResize)]
     public class MainActivity : BaseActivity<MainViewModel>
     {
         private const string EXIT_APP_MESSAGE = "Are you want to exit application?";

@@ -72,6 +72,11 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
                     .To(vm => vm.Items);
 
                 set
+                    .Bind(adapter)
+                    .For(v => v.IsLoadingMore)
+                    .To(vm => vm.IsLoadingMore);
+
+                set
                     .Bind(mvxRecyclerView)
                     .For(v => v.ItemsSource)
                     .To(vm => vm.Items);
@@ -92,12 +97,12 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
                 set.Bind(scrollListener)
                     .For(x => x.LoadingOffset)
-                    .To(vm => vm.LoadingOffset);
+                    .To(vm => ToDoListViewModel.LoadingOffset);
 
                 set
                     .Bind(addButton)
                     .For(v => v.BindClick())
-                    .To(vm => vm.ToolbarCommand);
+                    .To(vm => vm.NewTaskCommand);
 
                 set.Apply();
 

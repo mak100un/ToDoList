@@ -1,14 +1,15 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Android.Views;
 using AndroidX.RecyclerView.Widget;
 using DynamicData.Binding;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using ReactiveUI;
-using Swordfish.NET.Collections;
-using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels.Items;
 using ToDoList.Droid.ViewHolder;
 
@@ -16,6 +17,7 @@ namespace ToDoList.Droid.Adapters;
 
 public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter, INotifyPropertyChanged
 {
+    private readonly CompositeDisposable _compositeDisposable = new ();
     private readonly Action _scrollToTop;
     private IDisposable _disposable;
 
@@ -32,21 +34,37 @@ public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter, INotifyPropertyCh
                 _disposable = Items
                     ?.ObserveCollectionChanges()
                     .Subscribe(args => OnItemsChanged(args.EventArgs));
-            });
+            })
+            .DisposeWith(_compositeDisposable);
+
+        this.WhenAnyValue(vm => vm.IsLoadingMore)
+            .Skip(1)
+            .Subscribe(_ =>
+            {
+                switch (IsLoadingMore)
+                {
+                    case true:
+                        NotifyItemInserted(Items.Count);
+                        break;
+                    default: NotifyItemRemoved(Items.Count);
+                        break;
+                }
+            })
+            .DisposeWith(_compositeDisposable);
     }
 
-    public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; set; }
+    public ObservableCollection<ToDoListItemViewModel> Items { get; set; }
 
-    public override int GetItemViewType(int position)
-    {
-        var itemAtPosition = GetItem(position);
+    public override int ItemCount => IsLoadingMore ? Items.Count + 1 : Items.Count;
 
-        return (itemAtPosition as BaseToDoListItemViewModel)?.ItemType switch
+    public bool IsLoadingMore { get; set; }
+
+    public override int GetItemViewType(int position) =>
+        (Items.Count == position) switch
         {
-            ToDoListItemType.Task => Resource.Layout.todo_list_item_template,
-            ToDoListItemType.Loading => Resource.Layout.loading_item,
+            false => Resource.Layout.loading_item,
+            _ => Resource.Layout.todo_list_item_template,
         };
-    }
 
     public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -69,6 +87,7 @@ public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter, INotifyPropertyCh
     {
         if (disposing)
         {
+            _compositeDisposable?.Clear();
             _disposable?.Dispose();
             _disposable = null;
         }

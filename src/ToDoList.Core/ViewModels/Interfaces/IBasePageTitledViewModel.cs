@@ -2,7 +2,7 @@ using MvvmCross.ViewModels;
 
 namespace ToDoList.Core.ViewModels.Interfaces;
 
-public interface IBaseViewModel : IMvxViewModel
+public interface IBasePageTitledViewModel : IMvxViewModel
 {
     public string PageTitle { get; }
 }

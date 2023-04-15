@@ -4,11 +4,11 @@ using MvvmCross.ViewModels;
 
 namespace ToDoList.Core.ViewModels.Base;
 
-public abstract class BaseResultViewModel<TParameter, TResult> : BaseViewModelResult<TResult>, IMvxViewModel<TParameter, TResult>
+public abstract class BasePageTitledResultViewModel<TParameter, TResult> : BasePageTitledViewModelResult<TResult>, IMvxViewModel<TParameter, TResult>
     where TParameter : notnull
     where TResult : notnull
 {
-    protected BaseResultViewModel(ILogger logger)
+    protected BasePageTitledResultViewModel(ILogger logger)
         : base(logger)
     {
     }
@@ -16,10 +16,10 @@ public abstract class BaseResultViewModel<TParameter, TResult> : BaseViewModelRe
     public abstract void Prepare(TParameter parameter);
 }
 
-public abstract class BaseViewModelResult<TResult> : BaseViewModel, IMvxViewModelResult<TResult>
+public abstract class BasePageTitledViewModelResult<TResult> : BasePageTitledViewModel, IMvxViewModelResult<TResult>
     where TResult : notnull
 {
-    protected BaseViewModelResult(ILogger logger)
+    protected BasePageTitledViewModelResult(ILogger logger)
         : base(logger)
     {
     }

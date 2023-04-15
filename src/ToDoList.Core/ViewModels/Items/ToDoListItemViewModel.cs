@@ -1,4 +1,4 @@
-using MvvmCross.Commands;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ToDoList.Core.Definitions.Attributes;
 using ToDoList.Core.Definitions.DalModels;
@@ -6,7 +6,7 @@ using ToDoList.Core.Definitions.Enums;
 
 namespace ToDoList.Core.ViewModels.Items;
 
-public class ToDoListItemViewModel : BaseToDoListItemViewModel
+public class ToDoListItemViewModel : ReactiveObject
 {
     [Reactive]
     [Observe]
@@ -21,6 +21,4 @@ public class ToDoListItemViewModel : BaseToDoListItemViewModel
     public ToDoTaskStatus Status { get; set; }
 
     public ToDoListItemDalModel Item { get; set; } = new ();
-
-    public override ToDoListItemType ItemType => ToDoListItemType.Task;
 }

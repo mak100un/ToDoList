@@ -1,18 +1,19 @@
+using System.Windows.Input;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
 using Google.Android.Material.AppBar;
 using ToDoList.Core.ViewModels.Base;
-using ToDoList.Core.ViewModels.Interfaces;
 
 namespace ToDoList.Droid.Fragments;
 
 public abstract class BaseMenuFragment<TViewModel> : BaseFragment<TViewModel>
-    where TViewModel : BaseViewModel, IBaseToolbarViewModel
+    where TViewModel : BasePageTitledViewModel
 {
     private MaterialToolbar _toolbar;
 
     protected abstract int MenuResourceId { get; }
+    protected abstract ICommand MenuCommand { get; }
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -35,5 +36,5 @@ public abstract class BaseMenuFragment<TViewModel> : BaseFragment<TViewModel>
         base.Dispose(disposing);
     }
 
-    private void OnMenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e) => ViewModel.ToolbarCommand?.Execute(null);
+    private void OnMenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e) => MenuCommand?.Execute(null);
 }

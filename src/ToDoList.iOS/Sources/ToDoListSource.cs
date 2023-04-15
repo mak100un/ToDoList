@@ -1,29 +1,24 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using DynamicData.Binding;
 using Foundation;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Swordfish.NET.Collections;
-using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels.Items;
 using ToDoList.iOS.Cells;
+using ToDoList.iOS.Views;
 using UIKit;
 
 namespace ToDoList.iOS.Sources;
 
 public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
 {
-    private readonly IReadOnlyDictionary<ToDoListItemType, string> _toDoListItemTypesToIdentifierMapper
-        = Enum.GetValues(typeof(ToDoListItemType))
-            .Cast<ToDoListItemType>()
-            .ToDictionary(type => type, type => type.ToString());
-
+    private readonly CompositeDisposable _compositeDisposable = new ();
     private IDisposable _disposable;
 
     public ToDoListSource(UITableView tableView)
@@ -34,22 +29,43 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
             .Subscribe(_ =>
             {
                 _disposable?.Dispose();
-                _disposable = null;
                 _disposable = Items
                     ?.ObserveCollectionChanges()
                     .Subscribe(args => OnItemsChanged(args.EventArgs));
-            });
+            })
+            .DisposeWith(_compositeDisposable);
+
+        this.WhenAnyValue(vm => vm.IsLoadingMore)
+            .Skip(1)
+            .Subscribe(_ =>
+            {
+                switch (IsLoadingMore)
+                {
+                    case true:
+                        var loaderView = TableView.DequeueReusableHeaderFooterView(nameof(LoaderView)) as LoaderView;
+                        loaderView?.StartAnimating();
+                        TableView.TableFooterView = loaderView;
+                        break;
+                    case false:
+                        (TableView.TableFooterView as LoaderView)?.StopAnimating();
+                        TableView.TableFooterView = null;
+                        break;
+                }
+            })
+            .DisposeWith(_compositeDisposable);
     }
 
     public UITableView TableView { get; }
 
-    public ConcurrentObservableCollection<BaseToDoListItemViewModel> Items { get; set; }
+    public ObservableCollection<ToDoListItemViewModel> Items { get; set; }
 
     public ICommand LoadMoreCommand { get; set; }
 
     public ICommand EditTaskCommand { get; set; }
 
     public int LoadingOffset { get; set; }
+
+    public bool IsLoadingMore { get; set; }
 
     public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
     {
@@ -78,12 +94,11 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
             return null;
         }
 
-        var cell = tableView.DequeueReusableCell(_toDoListItemTypesToIdentifierMapper[item.ItemType], indexPath);
+        UITableViewCell cell = tableView.DequeueReusableCell(nameof(ToDoListItemCell), indexPath);
 
         return cell switch
         {
             ToDoListItemCell itemCell => GetItemCell(itemCell),
-            LoaderCell loaderCell => GetLoaderCell(loaderCell),
             _ => cell,
         };
 
@@ -91,12 +106,6 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
         {
             itemCell.DataContext = item;
             return itemCell;
-        }
-
-        static LoaderCell GetLoaderCell(LoaderCell loaderCell)
-        {
-            loaderCell.StartAnimating();
-            return loaderCell;
         }
     }
 
@@ -106,6 +115,7 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
     {
         if (disposing)
         {
+            _compositeDisposable?.Clear();
             _disposable?.Dispose();
             _disposable = null;
         }

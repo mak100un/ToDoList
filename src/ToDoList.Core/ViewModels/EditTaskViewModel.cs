@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using MvvmCross;
 using MvvmCross.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,38 +10,40 @@ using ToDoList.Core.Definitions.Attributes;
 using ToDoList.Core.Definitions.Constants;
 using ToDoList.Core.Definitions.DalModels;
 using ToDoList.Core.Definitions.Enums;
-using ToDoList.Core.Definitions.Models;
+using ToDoList.Core.Repositories.Interfaces;
 using ToDoList.Core.Services.Interfaces;
 using ToDoList.Core.ViewModels.Base;
-using ToDoList.Core.ViewModels.Interfaces;
 using ToDoList.Core.ViewModels.Items;
 
 namespace ToDoList.Core.ViewModels
 {
-    public sealed class EditTaskViewModel : BaseActionViewModel<EditTaskResult>, IBaseToolbarViewModel
+    public sealed class EditTaskViewModel : BasePageTitledActionViewModel
     {
         private const string DELETE_TASK_MESSAGE = "Are you sure to delete this task?";
 
-        private readonly Lazy<IDialogService> _dialogService;
-        public IMvxAsyncCommand ToolbarCommand { get; }
+        private readonly Lazy<IToDoListRepository> _toDoListRepository;
+
+        public IMvxAsyncCommand DeleteCommand { get; }
 
         public EditTaskViewModel(
             IMapper mapper,
+            Lazy<IToDoListRepository> toDoListRepository,
             ILogger<EditTaskViewModel> logger)
             : base(mapper, logger)
         {
-            _dialogService = new Lazy<IDialogService>(Mvx.IoCProvider.Resolve<IDialogService>);
+            _toDoListRepository = toDoListRepository;
 
-            ToolbarCommand = new MvxAsyncCommand(() =>
-                    RunSafeTaskAsync(async () =>
+            DeleteCommand = new MvxAsyncCommand(() =>
+                RunSafeTaskAsync(async () =>
+                {
+                    if (!await DialogService.DisplayAlertAsync(null, DELETE_TASK_MESSAGE, MessageConstants.YES_MESSAGE, MessageConstants.NO_MESSAGE))
                     {
-                        if (!await _dialogService.Value.DisplayAlertAsync(null, DELETE_TASK_MESSAGE, MessageConstants.YES_MESSAGE, MessageConstants.NO_MESSAGE))
-                        {
-                            return;
-                        }
+                        return;
+                    }
 
-                        await NavigationService.Close(this, new(CurrentToDoList, EditTaskType.Delete));
-                    }));
+                    toDoListRepository.Value.Delete(CurrentToDoList.Item.Id);
+                    await NavigationService.Close(this, CurrentToDoList);
+                }));
 
              this.WhenAnyValue(vm => vm.Title,
                      vm => vm.Description,
@@ -68,11 +69,16 @@ namespace ToDoList.Core.ViewModels
 
         public bool UpdatedAtVisible => UpdatedAt != null;
 
-        public bool ToolbarItemVisible => true;
-
         public override string PageTitle => "Edit task";
 
         protected override void OnAfterMap(ToDoListItemDalModel toDoListItemDalModel) => toDoListItemDalModel.UpdatedAt = DateTime.Now;
-        protected override EditTaskResult OnResultSet(ToDoListItemViewModel item) => new (item, EditTaskType.Update);
+
+        protected override ToDoListItemViewModel OnResultSet(ToDoListItemViewModel item)
+        {
+            _toDoListRepository.Value.Update(CurrentToDoList.Item);
+
+            // Return null cause nothing to do on ToDoListViewModel
+            return null;
+        }
     }
 }

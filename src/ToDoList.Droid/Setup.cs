@@ -10,6 +10,7 @@ using ToDoList.Droid.Services;
 using ToDoList.Core;
 using ToDoList.Core.Services.Interfaces;
 using ToDoList.Droid.Bindings;
+using ToDoList.Droid.Definitions.Constants;
 
 namespace ToDoList.Droid
 {
@@ -30,9 +31,9 @@ namespace ToDoList.Droid
         {
             base.FillTargetFactories(registry);
 
-            registry.RegisterFactory(new MvxCustomBindingFactory<ImageView>("DrawableResourceId", imageView => new ImageViewDrawableIdTargetBinding(imageView)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("TextColor", textView => new TextViewTextColorTargetBinding(textView)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<View>("Background", view => new ViewBackgroundTargetBinding(view)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<ImageView>(BindingConstants.IMAGEVIEW_DRAWABLE_RESOURCE_ID, imageView => new ImageViewDrawableIdTargetBinding(imageView)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>(BindingConstants.TEXTVIEW_TEXT_COLOR, textView => new TextViewTextColorTargetBinding(textView)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<View>(BindingConstants.VIEW_BACKGROUND, view => new ViewBackgroundTargetBinding(view)));
         }
 
         protected override ILoggerProvider CreateLogProvider() => new SerilogLoggerProvider();

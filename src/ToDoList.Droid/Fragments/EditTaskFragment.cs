@@ -1,13 +1,16 @@
 using System;
 using System.Linq;
+using System.Windows.Input;
 using Android.OS;
 using Android.Views;
 using Google.Android.Material.RadioButton;
+using Google.Android.Material.TextField;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels;
 using ToDoList.Core.ViewModels.Extra;
+using ToDoList.Droid.Definitions.Converters;
 using ToDoList.Droid.Widgets;
 
 namespace ToDoList.Droid.Fragments;
@@ -25,11 +28,15 @@ public class EditTaskFragment : BaseMenuFragment<EditTaskViewModel>
 
     protected override int MenuResourceId => Resource.Menu.edit_task_menu;
 
+    protected override ICommand MenuCommand => ViewModel.DeleteCommand;
+
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         var view = base.OnCreateView(inflater, container, savedInstanceState);
 
-        var segmentedControl = view.FindViewById<SegmentedControl>(Resource.Id.segmented_control);
+        SegmentedControl segmentedControl = view.FindViewById<SegmentedControl>(Resource.Id.segmented_control);
+        TextInputLayout titleTextInputLayout = view.FindViewById<TextInputLayout>(Resource.Id.title_text_input_layout);
+        TextInputLayout descriptionTextInputLayout = view.FindViewById<TextInputLayout>(Resource.Id.description_text_input_layout);
 
         var items = Enum.GetValues(typeof(ToDoTaskStatus))
             .Cast<ToDoTaskStatus>()
@@ -49,6 +56,18 @@ public class EditTaskFragment : BaseMenuFragment<EditTaskViewModel>
             .Bind(segmentedControl)
             .For(v => v.SelectedSegment)
             .To(vm => vm.SelectedSegment);
+
+        set
+            .Bind(titleTextInputLayout)
+            .For(v => v.HintEnabled)
+            .To(vm => vm.Title)
+            .WithConversion<IsNullOrEmptyConverter>();
+
+        set
+            .Bind(descriptionTextInputLayout)
+            .For(v => v.HintEnabled)
+            .To(vm => vm.Description)
+            .WithConversion<IsNullOrEmptyConverter>();
 
         set.Apply();
 

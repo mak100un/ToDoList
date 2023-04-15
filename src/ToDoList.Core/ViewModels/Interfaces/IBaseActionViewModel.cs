@@ -1,6 +1,6 @@
 using ToDoList.Core.ViewModels.Items;
 
-namespace ToDoList.Core.ViewModels.Base;
+namespace ToDoList.Core.ViewModels.Interfaces;
 
 public interface IBaseActionViewModel
 {

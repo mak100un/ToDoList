@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using MvvmCross.Converters;
 
-namespace ToDoList.Core.Definitions.Converters;
+namespace ToDoList.iOS.Definitions.Converters;
 
 public class InvertedValueConverter : MvxValueConverter<bool, bool>
 {

@@ -23,7 +23,11 @@ namespace ToDoList.Core
                 .RegisterAsLazySingleton();
 
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILiteDatabase>(() => new LiteDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DbConstants.DB_NAME)));
+            Mvx.IoCProvider.RegisterSingleton(() => new Lazy<ILiteDatabase>(Mvx.IoCProvider.Resolve<ILiteDatabase>));
+
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IToDoListRepository, ToDoListRepository>();
+            Mvx.IoCProvider.RegisterSingleton(() => new Lazy<IToDoListRepository>(Mvx.IoCProvider.Resolve<IToDoListRepository>));
+
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton(Mapper.Build);
 
             RegisterAppStart<ToDoListViewModel>();
