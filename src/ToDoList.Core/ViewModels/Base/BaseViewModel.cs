@@ -19,7 +19,6 @@ namespace ToDoList.Core.ViewModels.Base
             Logger = logger;
         }
 
-        // TODO Why inject over ctor ?
         [MvxInject]
         public IMvxNavigationService NavigationService { get; set; }
 

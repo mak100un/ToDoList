@@ -45,7 +45,6 @@ public class ScrollableTextInputEditText : TextInputEditText
 
     private void InitScroll() => SetOnTouchListener(new EditorTouchListener());
 
-    // TODO Change scrollable property is not enough?
     private class EditorTouchListener : Java.Lang.Object, IOnTouchListener
     {
         /// <inheritdoc/>

@@ -39,7 +39,6 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
         var view = base.OnCreateView(inflater, container, savedInstanceState);
 
-        // TODO Simplify with Visibility property ?
         var stateContainer = view.FindViewById<StateContainer>(Resource.Id.state_container);
 
         stateContainer.States = new Dictionary<State, Func<View>>

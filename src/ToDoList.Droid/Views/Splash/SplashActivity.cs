@@ -11,7 +11,7 @@ namespace ToDoList.Droid.Views.Splash
         Theme = "@style/AppTheme.Splash",
         Icon = "@mipmap/ic_launcher",
         RoundIcon = "@mipmap/ic_launcher_round")]
-    // TODO Ctor with resource very usable here
+    // Ctor with resource very usable here
     public class SplashActivity : MvxSplashScreenActivity
     {
     }

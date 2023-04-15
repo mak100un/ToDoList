@@ -17,7 +17,6 @@ namespace ToDoList.Droid.ViewHolder;
 
 public class ToDoListItemRecyclerViewHolder : MvxRecyclerViewHolder
 {
-    // TODO click - Adapter.ItemClick ; MvxRecyclerViewHolder.OnItemViewClick
     public ToDoListItemRecyclerViewHolder(View itemView, IMvxAndroidBindingContext context)
         : base(itemView, context)
     {

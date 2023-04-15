@@ -30,8 +30,11 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
 
         // TODO How it works? OnResultSet, OnAfterMap
         ActionCommand = new MvxAsyncCommand(() =>
-                RunSafeTaskAsync(() => NavigationService.Close(this, OnResultSet(_mapper.Map(this, CurrentToDoList,
-                    o => o.AfterMap((_, d) => OnAfterMap(d.Item)))))),
+                RunSafeTaskAsync(() => NavigationService.Close(this, OnResultSet(_mapper.Map(
+                    this,
+                    CurrentToDoList,
+                    o => o.AfterMap((_, d) => OnAfterMap(d.Item))
+                    )))),
             () => IsValid);
     }
 
@@ -59,7 +62,6 @@ public abstract class BaseActionViewModel<TResult> : BaseResultViewModel<ToDoLis
     {
         if (viewFinishing)
         {
-            // TODO .Dispose() ?
             CompositeDisposable.Clear();
         }
 

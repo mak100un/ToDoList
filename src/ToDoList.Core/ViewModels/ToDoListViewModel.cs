@@ -128,7 +128,6 @@ namespace ToDoList.Core.ViewModels
                     return;
                 }
 
-                // TODO switch for bool ? :)
                 switch (value)
                 {
                     case true:
@@ -152,7 +151,6 @@ namespace ToDoList.Core.ViewModels
         [Reactive]
         public State State { get; private set; }
 
-        // TODO private property ?
         private int ToDoListItemsCount => _isLoadingMore ? Items.Count - 1 : Items.Count;
 
         // TODO Why concurrent?
@@ -165,8 +163,6 @@ namespace ToDoList.Core.ViewModels
             // TODO What if I don't want to wait for Initialize() ?
             await RunSafeTaskAsync(async () =>
             {
-                // TODO Could this loading-tasks-logic be simplified?
-
                 var newItems = _toDoListRepository.Value.GetItems(ToDoListItemsCount, PAGE_SIZE)?.ToArray();
 
                 var anyItems = newItems?.Length > 0;

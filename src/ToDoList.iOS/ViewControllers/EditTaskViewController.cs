@@ -191,6 +191,18 @@ public class EditTaskViewController : BaseToolbarViewController<EditTaskViewMode
         });
 
         View.AddConstraints(
+            // _scrollView.AtBottomOfSafeArea(View),
+            // _scrollView.AtTopOfSafeArea(View),
+            // _scrollView.AtLeftOfSafeArea(View),
+            // _scrollView.AtRightOfSafeArea(View),
+            
+            // _titleField.Height().EqualTo(44),
+            
+            // _descriptionView.Height().EqualTo(200),
+            
+            // _actionButton.Top().GreaterThanOrEqualTo().BottomOf(_statusStack).Plus(54),
+            
+        
             // _contentView
             _contentView.AtTopOf(_scrollView),
             _contentView.AtLeadingOf(_scrollView),

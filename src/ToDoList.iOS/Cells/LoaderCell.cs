@@ -43,7 +43,6 @@ public class LoaderCell : UITableViewCell
         this.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
     }
 
-    // TODO Why main thread ?
     public void StartAnimating() => DispatchQueue.MainQueue.DispatchAsync(() => _indicator?.StartAnimating());
 
     protected override void Dispose(bool disposing)

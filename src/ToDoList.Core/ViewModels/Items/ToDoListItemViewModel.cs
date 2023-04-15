@@ -8,7 +8,6 @@ namespace ToDoList.Core.ViewModels.Items;
 
 public class ToDoListItemViewModel : BaseToDoListItemViewModel
 {
-    // TODO If we have Item, do we need to have properties?
     [Reactive]
     [Observe]
     public string Title { get; set; }
