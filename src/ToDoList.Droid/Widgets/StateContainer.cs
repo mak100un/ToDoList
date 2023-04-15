@@ -11,6 +11,7 @@ using Android.Widget;
 using MvvmCross.Commands;
 using ReactiveUI;
 using ToDoList.Core.Definitions;
+using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Droid.Extensions;
 

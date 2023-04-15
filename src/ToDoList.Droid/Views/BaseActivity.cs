@@ -11,7 +11,7 @@ namespace ToDoList.Droid.Views
     public abstract class BaseActivity<TViewModel> : MvxActivity<TViewModel>
         where TViewModel : class, IMvxViewModel
     {
-        private readonly Rect _currentFocusRect = new Rect();
+        private readonly Rect _currentFocusRect = new ();
 
         protected abstract int ActivityLayoutId { get; }
 

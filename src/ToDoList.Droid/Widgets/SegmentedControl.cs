@@ -26,9 +26,10 @@ public class SegmentedControl : RadioGroup, INotifyPropertyChanged
 
     private void Init()
     {
-        this
-            .WhenAnyValue(c => c.CheckedRadioButtonId)
-            .Where(id => id != -1)
+        Observable.FromEventPattern<EventHandler<CheckedChangeEventArgs>, CheckedChangeEventArgs>(
+                h => CheckedChange += h,
+                h => CheckedChange -= h)
+            .Where(_ => CheckedRadioButtonId != -1)
             .Select(_ => FindViewById(CheckedRadioButtonId))
             .WhereNotNull()
             .Subscribe(rB => SelectedSegment = IndexOfChild(rB))

@@ -23,8 +23,6 @@
         android:layout_height="wrap_content"
         style="@style/ActionButtonStyle"
         android:text="@string/create_first_one"
-        android:textStyle="bold"
-        android:textSize="@dimen/body_text_size"
         app:MvxBind="Click ToolbarCommand"
         android:layout_marginTop="40dp"/>
 

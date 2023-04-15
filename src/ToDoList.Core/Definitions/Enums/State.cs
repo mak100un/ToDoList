@@ -1,4 +1,4 @@
-namespace ToDoList.Core.Definitions;
+namespace ToDoList.Core.Definitions.Enums;
 
 public enum State
 {

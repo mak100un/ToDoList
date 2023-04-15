@@ -6,6 +6,7 @@ using Cirrious.FluentLayouts.Touch;
 using MvvmCross.Commands;
 using ReactiveUI;
 using ToDoList.Core.Definitions;
+using ToDoList.Core.Definitions.Enums;
 using UIKit;
 
 namespace ToDoList.iOS.Views;

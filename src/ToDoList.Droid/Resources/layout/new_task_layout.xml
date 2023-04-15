@@ -82,10 +82,12 @@
                     android:layout_marginTop="4dp"
                     android:hint="@string/description_placeholder">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <ToDoList.Droid.Widgets.ScrollableTextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lines="7"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
                         android:textSize="@dimen/edit_text_size"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
@@ -108,8 +110,6 @@
                 android:id="@+id/action_button"
                 app:MvxBind="Click ActionCommand; Enabled IsValid"
                 android:layout_marginVertical="54dp"
-                android:textStyle="bold"
-                android:textSize="@dimen/body_text_size"
                 app:layout_constraintTop_toBottomOf="@id/white_space"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

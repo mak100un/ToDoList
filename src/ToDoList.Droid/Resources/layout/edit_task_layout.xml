@@ -82,10 +82,12 @@
                     android:layout_marginTop="4dp"
                     android:hint="@string/description_placeholder">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <ToDoList.Droid.Widgets.ScrollableTextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lines="7"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
                         android:textSize="@dimen/edit_text_size"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
@@ -108,11 +110,12 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/primaryTextColor"
                     android:textSize="@dimen/primary_text_size"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/status"/>
 
-                <todolist.droid.widget.SegmentedControl
+                <todolist.droid.widgets.SegmentedControl
                     android:id="@+id/segmented_control"
                     android:background="@drawable/segmented_control_background"
                     android:layout_width="match_parent"
@@ -137,17 +140,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/primaryTextColor"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:textSize="@dimen/primary_text_size"
                         android:text="@string/created_at"/>
 
                     <TextView
-                        android:layout_gravity="end"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:gravity="right"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="@dimen/primary_text_size"
                         app:MvxBind="Text CreatedAt"/>
 
@@ -161,17 +166,19 @@
                     app:MvxBind="Visibility Visibility(UpdatedAtVisible)">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="@dimen/primary_text_size"
                         android:text="@string/updated_at"/>
 
                     <TextView
-                        android:layout_gravity="end"
-                        android:layout_width="wrap_content"
+                        android:gravity="right"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="@dimen/primary_text_size"
                         app:MvxBind="Text UpdatedAt"/>
 

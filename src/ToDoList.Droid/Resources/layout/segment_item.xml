@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.radiobutton.MaterialRadioButton
+            xmlns:android="http://schemas.android.com/apk/res/android"
+             android:button="@null"
+             android:gravity="center"
+             android:background="@drawable/segmented_control_item_background"
+             android:textColor="@color/primaryTextColor"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:minHeight="32dp"
+             android:elevation="1dp"
+             android:textSize="13sp" />

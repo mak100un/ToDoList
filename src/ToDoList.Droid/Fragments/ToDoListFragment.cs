@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using Android.OS;
 using Android.Views;
 using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.FloatingActionButton;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.Platforms.Android.Binding;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using ToDoList.Core.Definitions;
+using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels;
 using ToDoList.Core.ViewModels.Extra;
 using ToDoList.Droid.Adapters;
 using ToDoList.Droid.Listeners;
-using ToDoList.Droid.TemplateSelectors;
 using ToDoList.Droid.Widgets;
 
 namespace ToDoList.Droid.Fragments;
@@ -21,7 +22,8 @@ namespace ToDoList.Droid.Fragments;
     IsCacheableFragment = true,
     ActivityHostViewModelType = typeof(MainViewModel),
     FragmentContentId = Resource.Id.content_frame,
-    AddToBackStack = false)]
+    AddToBackStack = true,
+    PopBackStackImmediateFlag = MvxPopBackStack.Inclusive)]
 public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 {
     protected override int ResourceId => Resource.Layout.todo_list_layout;
@@ -30,7 +32,7 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        MvxRecyclerView mvxRecyclerView = null;
+        View itemsView = null;
         View emptyView = null;
 
         var view = base.OnCreateView(inflater, container, savedInstanceState);
@@ -39,29 +41,27 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
         stateContainer.States = new Dictionary<State, Func<View>>
         {
-            [State.Default] = CreateRecyclerView,
+            [State.Default] = CreateItemsView,
             [State.NoData] = CreateEmptyView,
             [State.None] = default,
         };
 
         return view;
 
-        View CreateRecyclerView()
+        View CreateItemsView()
         {
-            return mvxRecyclerView ??= CreateInnerRecyclerView();
+            return itemsView ??= CreateInnerItemsView();
 
-            MvxRecyclerView CreateInnerRecyclerView()
+            View CreateInnerItemsView()
             {
-                mvxRecyclerView = new MvxRecyclerView(Activity, null);
-                var layoutManager = mvxRecyclerView.GetLayoutManager() as LinearLayoutManager;
-                layoutManager.StackFromEnd = true;
-                layoutManager.ReverseLayout = false;
-                //mvxRecyclerView.SetAdapter(new ToDoListItemRecyclerAdapter());
+                itemsView = LayoutInflater.Inflate(Resource.Layout.to_do_list_items_view, stateContainer, false);
+                var mvxRecyclerView = itemsView.FindViewById<MvxRecyclerView>(Resource.Id.items_recycler);
+                mvxRecyclerView.SetAdapter(new ToDoListItemRecyclerAdapter(BindingContext as IMvxAndroidBindingContext));
 
-                var scrollListener = new RecyclerPaginationListener(layoutManager);
+                var addButton = itemsView.FindViewById<FloatingActionButton>(Resource.Id.add_button);
+
+                var scrollListener = new RecyclerPaginationListener(mvxRecyclerView.GetLayoutManager() as LinearLayoutManager, OnRecyclerScroll);
                 mvxRecyclerView.AddOnScrollListener(scrollListener);
-                mvxRecyclerView.ItemTemplateId = Resource.Layout.item_template;
-                mvxRecyclerView.ItemTemplateSelector = new ToDoListItemTemplateSelector();
 
                 var set = this.CreateBindingSet<ToDoListFragment, ToDoListViewModel>();
 
@@ -75,9 +75,37 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
                     .For(v => v.ItemClick)
                     .To(vm => vm.EditTaskCommand);
 
+                set.Bind(scrollListener)
+                    .For(x => x.LoadMoreCommand)
+                    .To(vm => vm.LoadMoreCommand);
+
+                set.Bind(scrollListener)
+                    .For(x => x.LoadingOffset)
+                    .To(vm => vm.LoadingOffset);
+
+                set
+                    .Bind(addButton)
+                    .For(v => v.BindClick())
+                    .To(vm => vm.ToolbarCommand);
+
                 set.Apply();
 
-                return mvxRecyclerView;
+                return itemsView;
+
+                void OnRecyclerScroll(float dy)
+                {
+                    switch (dy)
+                    {
+                        case > 0
+                        when addButton.IsShown:
+                            addButton.Hide();
+                            break;
+                        case < 0
+                             when !addButton.IsShown:
+                            addButton.Show();
+                            break;
+                    }
+                }
             }
         }
 

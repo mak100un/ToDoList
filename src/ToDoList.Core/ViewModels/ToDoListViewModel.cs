@@ -65,7 +65,8 @@ namespace ToDoList.Core.ViewModels
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-            }), toDoListItem => Items.Contains(toDoListItem));
+            }), toDoListItem => toDoListItem.ItemType == ToDoListItemType.Task
+                                && Items.Contains(toDoListItem));
 
             ToolbarCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(async () =>
             {
@@ -93,8 +94,6 @@ namespace ToDoList.Core.ViewModels
 
                 IsLoadMoreEnabled = newItems?.Length >= PAGE_SIZE;
                 IsLoadingMore = false;
-
-                //return Task.CompletedTask;
             },
             ex =>
             {

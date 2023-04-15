@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 using AndroidX.RecyclerView.Widget;
@@ -7,10 +8,12 @@ namespace ToDoList.Droid.Listeners;
 public class RecyclerPaginationListener: RecyclerView.OnScrollListener, INotifyPropertyChanged
 {
     private readonly LinearLayoutManager _layoutManager;
+    private readonly Action<float> _onRecyclerScroll;
 
-    public RecyclerPaginationListener(LinearLayoutManager layoutManager)
+    public RecyclerPaginationListener(LinearLayoutManager layoutManager, Action<float> onRecyclerScroll)
     {
         _layoutManager = layoutManager;
+        _onRecyclerScroll = onRecyclerScroll;
     }
 
     public ICommand LoadMoreCommand { get; set; }
@@ -20,6 +23,7 @@ public class RecyclerPaginationListener: RecyclerView.OnScrollListener, INotifyP
     public override void OnScrolled(RecyclerView recyclerView, int dx, int dy)
     {
         base.OnScrolled(recyclerView, dx, dy);
+        _onRecyclerScroll?.Invoke(dy);
 
         if (_layoutManager.FindLastVisibleItemPosition() < LoadingOffset)
         {

@@ -3,9 +3,9 @@ using MvvmCross.Platforms.Android.Binding.Target;
 
 namespace ToDoList.Droid.Bindings;
 
-public class ViewBackgroundColorTargetBinding : MvxAndroidTargetBinding<View, int>
+public class ViewBackgroundTargetBinding : MvxAndroidTargetBinding<View, int>
 {
-    public ViewBackgroundColorTargetBinding(View view)
+    public ViewBackgroundTargetBinding(View view)
         : base(view)
     {
     }

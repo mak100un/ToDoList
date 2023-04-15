@@ -30,17 +30,9 @@ namespace ToDoList.Droid
         {
             base.FillTargetFactories(registry);
 
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(ImageViewDrawableIdTargetBinding),
-                typeof(ImageView), "DrawableId");
-
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(TextViewTextColorTargetBinding),
-                typeof(TextView), "TextColor");
-
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(ViewBackgroundColorTargetBinding),
-                typeof(View), "BackgroundColor");
+            registry.RegisterFactory(new MvxCustomBindingFactory<ImageView>("DrawableResourceId", imageView => new ImageViewDrawableIdTargetBinding(imageView)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("TextColor", textView => new TextViewTextColorTargetBinding(textView)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<View>("Background", view => new ViewBackgroundTargetBinding(view)));
         }
 
         protected override ILoggerProvider CreateLogProvider() => new SerilogLoggerProvider();

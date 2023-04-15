@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
+    <color name="colorBlackRipple">#32000000</color>
     <color name="primaryColor">@android:color/white</color>
     <color name="primaryDarkColor">@android:color/white</color>
 
@@ -10,7 +11,7 @@
 
     <color name="edit_text_background_color">#EDEDED</color>
     <color name="primary_button_background_color">#29B2FF</color>
-    <color name="segmented_control_background_color">#7676801F</color>
+    <color name="segmented_control_background_color">#1F767680</color>
     <color name="disabled_button_background_color">#DEDEDE</color>
     <color name="disabled_text_color">#B5B5B5</color>
     

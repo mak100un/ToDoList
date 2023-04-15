@@ -8,7 +8,7 @@ namespace ToDoList.Droid.Fragments;
     IsCacheableFragment = true,
     ActivityHostViewModelType = typeof(MainViewModel),
     FragmentContentId = Resource.Id.content_frame,
-    AddToBackStack = false)]
+    AddToBackStack = true)]
 public class NewTaskFragment : BaseFragment<NewTaskViewModel>
 {
     protected override int ResourceId => Resource.Layout.new_task_layout;

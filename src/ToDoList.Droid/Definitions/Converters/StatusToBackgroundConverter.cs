@@ -5,7 +5,7 @@ using ToDoList.Core.Definitions.Enums;
 
 namespace ToDoList.Droid.Definitions.Converters;
 
-public class StatusToBackgroundColorConverter : MvxValueConverter<ToDoTaskStatus, int>
+public class StatusToBackgroundConverter : MvxValueConverter<ToDoTaskStatus, int>
 {
     protected override int Convert(ToDoTaskStatus value, Type targetType, object parameter, CultureInfo culture)
         => value switch

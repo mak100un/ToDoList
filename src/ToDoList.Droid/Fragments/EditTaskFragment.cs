@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using Android.Graphics;
 using Android.OS;
 using Android.Views;
-using Android.Widget;
+using Google.Android.Material.RadioButton;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using ToDoList.Core.Definitions.Enums;
@@ -17,12 +16,14 @@ namespace ToDoList.Droid.Fragments;
     IsCacheableFragment = true,
     ActivityHostViewModelType = typeof(MainViewModel),
     FragmentContentId = Resource.Id.content_frame,
-    AddToBackStack = false)]
-public class EditTaskFragment : BaseFragment<EditTaskViewModel>
+    AddToBackStack = true)]
+public class EditTaskFragment : BaseMenuFragment<EditTaskViewModel>
 {
     protected override int ResourceId => Resource.Layout.edit_task_layout;
 
     protected override bool HasBackButton => true;
+
+    protected override int MenuResourceId => Resource.Menu.edit_task_menu;
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -37,10 +38,8 @@ public class EditTaskFragment : BaseFragment<EditTaskViewModel>
 
         foreach (var item in items)
         {
-            var radioButton = new RadioButton(Activity);
+            var radioButton = LayoutInflater.Inflate(Resource.Layout.segment_item, segmentedControl, false) as MaterialRadioButton;
             radioButton.Text = item;
-            radioButton.SetTextColor(Color.Black);
-            radioButton.SetBackgroundResource(Resource.Drawable.segmented_control_item_background);
             segmentedControl.AddView(radioButton);
         }
 

@@ -12,4 +12,5 @@
     <string name="created_at">CREATED AT</string>
     <string name="updated_at">UPDATED AT</string>
     <string name="no_tasks_yet">No tasks yet</string>
+    <string name="delete">Delete</string>
 </resources>

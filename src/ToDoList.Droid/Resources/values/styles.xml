@@ -50,12 +50,14 @@
         <item name="android:stateListAnimator">@null</item>
         <item name="android:letterSpacing">0.05</item>
         <item name="android:elevation">0dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/body_text_size</item>
     </style>
 
     <style name="TextInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="hintTextColor">@color/accentColor</item>
+        <item name="hintTextColor">@color/placeholder_color</item>
         <item name="android:textColorHint">@color/placeholder_color</item>
     </style>
 </resources>
