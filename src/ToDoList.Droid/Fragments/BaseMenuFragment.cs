@@ -3,6 +3,7 @@ using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
 using Google.Android.Material.AppBar;
+using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Core.ViewModels.Base;
 
 namespace ToDoList.Droid.Fragments;
@@ -17,6 +18,7 @@ public abstract class BaseMenuFragment<TViewModel> : BaseFragment<TViewModel>
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        OnMenuItemClickUnsubscribe();
         var view = base.OnCreateView(inflater, container, savedInstanceState);
 
         (_toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.toolbar)).MenuItemClick += OnMenuItemClick;
@@ -28,13 +30,14 @@ public abstract class BaseMenuFragment<TViewModel> : BaseFragment<TViewModel>
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing
-            && _toolbar != null)
+        if (disposing)
         {
-            _toolbar.MenuItemClick -= OnMenuItemClick;
+            OnMenuItemClickUnsubscribe();
         }
         base.Dispose(disposing);
     }
 
     private void OnMenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e) => MenuCommand?.Execute(null);
+
+    private void OnMenuItemClickUnsubscribe() => _toolbar?.Then(toolbar => toolbar.MenuItemClick -= OnMenuItemClick);
 }

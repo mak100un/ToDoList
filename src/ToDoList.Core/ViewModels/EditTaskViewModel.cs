@@ -40,7 +40,6 @@ namespace ToDoList.Core.ViewModels
                         return;
                     }
 
-                    toDoListRepository.Value.Delete(CurrentToDoList.Item.Id);
                     await NavigationService.Close(this, CurrentToDoList);
                 }));
 

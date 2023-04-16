@@ -74,6 +74,8 @@
     <BundleResource Include="Resources\launch_image.png" />
     <BundleResource Include="Resources\launch_image%402x.png" />
     <BundleResource Include="Resources\launch_image%403x.png" />
+    <BundleResource Include="Resources\tasks.png" />
+    <BundleResource Include="Resources\tasks_small.png" />
     <Compile Include="Cells\ToDoListItemCell.cs" />
     <Compile Include="Definitions\Converters\InvertedValueConverter.cs" />
     <Compile Include="Extensions\UIViewControllerExtensions.cs" />
@@ -82,8 +84,10 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\Interfaces\INativeDialogService.cs" />
     <Compile Include="Services\KeyboardInsetTracker.cs" />
     <Compile Include="Services\KeyboardObserver.cs" />
+    <Compile Include="Services\NativeDialogService.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\ToDoListSource.cs" />
     <Compile Include="Styles\ColorPalette.cs" />
@@ -103,45 +107,24 @@
     <Content Include="FodyWeavers.xsd" />
     <ImageAsset Include="Resources\Media.xcassets\Add.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\Add.imageset\plus.pdf" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (1)-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (1)-2.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (1).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (10).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (11).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (12).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (13).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (14).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (2).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (3)-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (3).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (4).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (5)-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (5).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (7)-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (7).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (8).png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\tasks (9).png" />
     <ImageAsset Include="Resources\Media.xcassets\Delete.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\Delete.imageset\delete.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\Delete.imageset\Vector.pdf" />
@@ -223,48 +206,12 @@
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.7.5</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.iOS.MaterialComponents">
+      <Version>92.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-87.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">

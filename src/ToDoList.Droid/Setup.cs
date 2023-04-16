@@ -11,6 +11,7 @@ using ToDoList.Core;
 using ToDoList.Core.Services.Interfaces;
 using ToDoList.Droid.Bindings;
 using ToDoList.Droid.Definitions.Constants;
+using ToDoList.Droid.Services.Interfaces;
 
 namespace ToDoList.Droid
 {
@@ -20,6 +21,7 @@ namespace ToDoList.Droid
         {
             base.InitializeFirstChance(iocProvider);
             iocProvider.LazyConstructAndRegisterSingleton<IDialogService, DialogService>();
+            iocProvider.LazyConstructAndRegisterSingleton<INativeDialogService, NativeDialogService>();
         }
 
         protected override IMvxIocOptions CreateIocOptions() => new MvxIocOptions

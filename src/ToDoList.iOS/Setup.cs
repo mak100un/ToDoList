@@ -6,6 +6,7 @@ using Serilog.Extensions.Logging;
 using ToDoList.Core;
 using ToDoList.Core.Services.Interfaces;
 using ToDoList.iOS.Services;
+using ToDoList.iOS.Services.Interfaces;
 
 namespace ToDoList.iOS
 {
@@ -15,6 +16,7 @@ namespace ToDoList.iOS
         {
             base.InitializeFirstChance(iocProvider);
             iocProvider.LazyConstructAndRegisterSingleton<IDialogService, DialogService>();
+            iocProvider.LazyConstructAndRegisterSingleton<INativeDialogService, NativeDialogService>();
             iocProvider.LazyConstructAndRegisterSingleton<KeyboardInsetTracker, KeyboardInsetTracker>();
         }
 

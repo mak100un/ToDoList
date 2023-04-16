@@ -4,13 +4,18 @@ using System.Linq.Expressions;
 using Cirrious.FluentLayouts.Touch;
 using CoreGraphics;
 using Foundation;
+using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
+using MvvmCross.ViewModels;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Definitions.Extensions;
+using ToDoList.Core.Definitions.Interactions;
 using ToDoList.Core.ViewModels;
 using ToDoList.iOS.Cells;
+using ToDoList.iOS.Services.Interfaces;
 using ToDoList.iOS.Sources;
 using ToDoList.iOS.Styles;
 using ToDoList.iOS.Views;
@@ -24,6 +29,18 @@ namespace ToDoList.iOS.ViewControllers
         private StateContainer _stateContainer;
         private UIView _emptyView;
         private UITableView _todoListTableView;
+        private IMvxInteraction<SnackbarInteraction> _deleteInteraction;
+
+        public IMvxInteraction<SnackbarInteraction> DeleteInteraction
+        {
+            get => _deleteInteraction;
+            set
+            {
+                _deleteInteraction?.Then(deletionInteraction => deletionInteraction.Requested -= OnDeleteInteractionRequested);
+                _deleteInteraction = value;
+                _deleteInteraction.Requested += OnDeleteInteractionRequested;
+            }
+        }
 
         protected override string Image => "Add";
         protected override Expression<Func<ToDoListViewModel, object>> NavigationItemCommandExtractor => vm => vm.NewTaskCommand;
@@ -47,6 +64,11 @@ namespace ToDoList.iOS.ViewControllers
             base.BindView();
 
             var set = this.CreateBindingSet<ToDoListViewController, ToDoListViewModel>();
+
+            set.Bind(this)
+                .For(view => view.DeleteInteraction)
+                .To(viewModel => viewModel.DeleteInteraction)
+                .OneWay();
 
             set
                 .Bind(_stateContainer)
@@ -105,7 +127,7 @@ namespace ToDoList.iOS.ViewControllers
                 _todoListTableView.RegisterClassForHeaderFooterViewReuse(typeof(LoaderView), nameof(LoaderView));
                 _todoListTableView.RegisterClassForCellReuse(typeof(ToDoListItemCell), nameof(ToDoListItemCell));
 
-                var todoListDataSource = new ToDoListSource(_todoListTableView, () => _todoListTableView.ScrollToRow(NSIndexPath.FromRowSection(0, 0), UITableViewScrollPosition.Top, true))
+                var todoListDataSource = new ToDoListSource(_todoListTableView, () => _todoListTableView.ScrollToRow(NSIndexPath.FromRowSection(0, 0), UITableViewScrollPosition.Top, false))
                 {
                     DeselectAutomatically = true,
                     AddAnimation = UITableViewRowAnimation.Automatic,
@@ -197,5 +219,7 @@ namespace ToDoList.iOS.ViewControllers
                 return _emptyView;
             }
         }
+
+        private void OnDeleteInteractionRequested(object sender, MvxValueEventArgs<SnackbarInteraction> e) => Mvx.IoCProvider.Resolve<INativeDialogService>().ShowSnackbar(e.Value.LabelText, e.Value.ActionText, () => e.Value.Action(true), () => e.Value.Action(false));
     }
 }

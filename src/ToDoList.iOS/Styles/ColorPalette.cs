@@ -13,6 +13,7 @@ namespace ToDoList.iOS.Styles
         public static readonly UIColor InputBackgroundButton = FromHexString("#EDEDED");
         public static readonly UIColor Primary = UIColor.White;
         public static readonly UIColor Accent = UIColor.Black;
+        public static readonly UIColor SnackbarButtonColor = UIColor.Yellow;
 
         private static UIColor FromHexString(string hexValue)
         {

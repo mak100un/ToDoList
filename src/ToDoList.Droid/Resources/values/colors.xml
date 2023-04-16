@@ -3,6 +3,7 @@
     <color name="colorBlackRipple">#32000000</color>
     <color name="primaryColor">@android:color/white</color>
     <color name="primaryDarkColor">@android:color/white</color>
+    <color name="snackbar_action_color">#FFFF00</color>
 
     <color name="accentColor">@android:color/black</color>
 

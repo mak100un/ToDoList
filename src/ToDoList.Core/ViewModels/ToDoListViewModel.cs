@@ -7,10 +7,13 @@ using AutoMapper;
 using DynamicData.Binding;
 using Microsoft.Extensions.Logging;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using ReactiveUI.Fody.Helpers;
 using Swordfish.NET.Collections.Auxiliary;
+using ToDoList.Core.Definitions.Constants;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Definitions.Extensions;
+using ToDoList.Core.Definitions.Interactions;
 using ToDoList.Core.Repositories.Interfaces;
 using ToDoList.Core.ViewModels.Base;
 using ToDoList.Core.ViewModels.Items;
@@ -20,9 +23,12 @@ namespace ToDoList.Core.ViewModels
     public class ToDoListViewModel : BasePageTitledViewModel
     {
         private const int PAGE_SIZE = 10;
+        private const string REVERT_TASK_DELETION = "Do you want to revert task?";
 
         private readonly Lazy<IToDoListRepository> _toDoListRepository;
         private readonly IMapper _mapper;
+
+        private readonly List<ToDoListItemViewModel> _deletionWaitList = new();
 
         public IMvxAsyncCommand<ToDoListItemViewModel> EditTaskCommand { get; }
 
@@ -46,7 +52,37 @@ namespace ToDoList.Core.ViewModels
                     return;
                 }
 
+                _deletionWaitList.Add(deleteTaskResult);
                 Items.TryRemove(deleteTaskResult);
+
+                var request = new SnackbarInteraction
+                {
+                    Action = revert =>
+                    {
+                        _deletionWaitList.TryRemove(deleteTaskResult);
+                        switch (revert)
+                        {
+                            case true:
+                                var previousItem = Items.OrderByDescending(item => item.Item.CreatedAt)?.FirstOrDefault(item => item.Item.CreatedAt < deleteTaskResult.Item.CreatedAt);
+                                if (previousItem == null)
+                                {
+                                    Items.Add(deleteTaskResult);
+                                }
+                                else
+                                {
+                                    Items.Insert(Items.IndexOf(previousItem), deleteTaskResult);
+                                }
+                                break;
+                            default:
+                                toDoListRepository.Value.Delete(toDoListItem.Item.Id);
+                                break;
+                        }
+                    },
+                    LabelText = REVERT_TASK_DELETION,
+                    ActionText = MessageConstants.YES_MESSAGE,
+                };
+
+                DeleteInteraction.Raise(request);
             }), toDoListItem => Items.Contains(toDoListItem));
 
             NewTaskCommand = new MvxAsyncCommand(() => RunSafeTaskAsync(async () =>
@@ -66,7 +102,7 @@ namespace ToDoList.Core.ViewModels
 
                 // Simulate loading
                 await Task.Delay(2500);
-                var newItems = _toDoListRepository.Value.GetItems(Items.Count, PAGE_SIZE)?.ToArray();
+                var newItems = _toDoListRepository.Value.GetItems(Items.Count + _deletionWaitList.Count, PAGE_SIZE)?.ToArray();
 
                 if (newItems?.Length > 0)
                 {
@@ -91,6 +127,8 @@ namespace ToDoList.Core.ViewModels
                 });
         }
 
+        public MvxInteraction<SnackbarInteraction> DeleteInteraction { get; } = new ();
+
         [Reactive]
         public bool IsLoadMoreEnabled { get; private set; }
 
@@ -111,7 +149,7 @@ namespace ToDoList.Core.ViewModels
 
             await RunSafeTaskAsync(async () =>
             {
-                var newItems = _toDoListRepository.Value.GetItems(Items.Count, PAGE_SIZE)?.ToArray();
+                var newItems = _toDoListRepository.Value.GetItems(Items.Count + _deletionWaitList.Count, PAGE_SIZE)?.ToArray();
 
                 var anyItems = newItems?.Length > 0;
                 if (anyItems)

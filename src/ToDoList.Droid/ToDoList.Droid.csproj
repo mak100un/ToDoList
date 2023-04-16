@@ -80,9 +80,12 @@
     <Compile Include="Fragments\NewTaskFragment.cs" />
     <Compile Include="Fragments\ToDoListFragment.cs" />
     <Compile Include="Linker\LinkerPleaseInclude.cs" />
+    <Compile Include="Listeners\BaseSnackbarCallback.cs" />
     <Compile Include="Listeners\RecyclerPaginationListener.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\Interfaces\INativeDialogService.cs" />
+    <Compile Include="Services\NativeDialogService.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="ViewHolder\LoadingRecyclerViewHolder.cs" />
     <Compile Include="ViewHolder\ToDoListItemRecyclerViewHolder.cs" />
@@ -158,6 +161,8 @@
     <AndroidResource Include="Resources\drawable\inprogress.xml" />
     <AndroidResource Include="Resources\drawable\segmented_control_background.xml" />
     <AndroidResource Include="Resources\drawable\segmented_control_item_background.xml" />
+    <AndroidResource Include="Resources\drawable\tasks.png" />
+    <AndroidResource Include="Resources\drawable\tasks_small.png" />
     <AndroidResource Include="Resources\drawable\todo.xml" />
     <AndroidResource Include="Resources\drawable\todo_item_background.xml" />
     <AndroidResource Include="Resources\drawable\todo_item_disabled_background.xml" />
@@ -179,25 +184,7 @@
     <AndroidResource Include="Resources\values\dimens.xml" />
     <AndroidResource Include="Resources\values-v21\styles.xml" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_mvvmcross_logo.png" />
     <AndroidResource Include="Resources\values-v19\styles.xml" />
-    <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml" />
     <AndroidResource Include="Resources\values\ic_launcher_background.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +196,13 @@
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
     <Content Include="FodyWeavers.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\drawable-hdpi" />
+    <Folder Include="Resources\drawable-mdpi" />
+    <Folder Include="Resources\drawable-xhdpi" />
+    <Folder Include="Resources\drawable-xxhdpi" />
+    <Folder Include="Resources\drawable-xxxhdpi" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -24,6 +24,7 @@ public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
 
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        OnNavigationClickUnsubscribe();
         base.OnCreateView(inflater, container, savedInstanceState);
         var view = this.BindingInflate(ResourceId, container, false);
         _toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.toolbar);
@@ -49,11 +50,12 @@ public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing
-            && _toolbar != null)
+        if (disposing)
         {
-            _toolbar.NavigationClick -= OnNavigationClick;
+            OnNavigationClickUnsubscribe();
         }
         base.Dispose(disposing);
     }
+
+    private void OnNavigationClickUnsubscribe() => _toolbar?.Then(toolbar => toolbar.NavigationClick -= OnNavigationClick);
 }

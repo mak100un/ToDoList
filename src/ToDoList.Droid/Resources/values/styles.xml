@@ -4,24 +4,29 @@
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/accentColor</item>
         <item name="colorPrimaryVariant">@color/primaryColor</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnPrimary">@color/primaryColor</item>
         <item name="colorSecondary">@color/accentColor</item>
         <item name="colorSecondaryVariant">#0039CB</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorOnSecondary">@color/primaryColor</item>
         <item name="colorError">#F44336</item>
-        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorOnError">@color/primaryColor</item>
         <item name="colorSurface">@color/primaryColor</item>
-        <item name="colorOnSurface">#212121</item>
+        <item name="colorOnSurface">@color/accentColor</item>
         <item name="android:colorBackground">@color/primaryColor</item>
-        <item name="colorOnBackground">#212121</item>
+        <item name="colorOnBackground">@color/accentColor</item>
         <item name="android:statusBarColor">@color/primaryColor</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">false</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
     </style>
 
     <!-- Default App theme applied if no resource style overrides for specific API level -->
     <style name="AppTheme" parent="AppTheme.Base">
+    </style>
+
+    <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/snackbar_action_color</item>
     </style>
 
     <!-- App Splash Screen Theme -->
