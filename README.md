@@ -3,10 +3,10 @@ Personal mobile task tracker created with the help of Xamarin.Native (iOS/Androi
 
 Video (Android):
 
-https://user-images.githubusercontent.com/44783367/232176910-1b5c3e9e-52ba-42e3-a235-79382f9e5c1c.mp4
+https://user-images.githubusercontent.com/44783367/232339317-513789f9-8860-453f-afb1-09dc865373f0.mp4
 
 
 Video (iOS):
 
-https://user-images.githubusercontent.com/44783367/232177027-69a43fee-d3b3-439e-b620-8d1cbe42a0a7.mp4
+https://user-images.githubusercontent.com/44783367/232339106-7686af46-47e9-434a-ad99-5708a7de2bd3.mp4
 
