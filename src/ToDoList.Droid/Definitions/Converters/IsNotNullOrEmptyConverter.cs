@@ -4,8 +4,8 @@ using MvvmCross.Converters;
 
 namespace ToDoList.Droid.Definitions.Converters;
 
-public class IsNullOrEmptyConverter : MvxValueConverter<string, bool>
+public class IsNotNullOrEmptyConverter : MvxValueConverter<string, bool>
 {
     protected override bool Convert(string value, Type targetType, object parameter, CultureInfo culture)
-        => string.IsNullOrEmpty(value);
+        => !string.IsNullOrEmpty(value);
 }

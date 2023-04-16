@@ -1,15 +1,18 @@
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using MvvmCross.Commands;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ToDoList.Core.Definitions.Attributes;
+using ToDoList.Core.Definitions.Constants;
 using ToDoList.Core.Definitions.DalModels;
+using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Core.ViewModels.Interfaces;
 using ToDoList.Core.ViewModels.Items;
-using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace ToDoList.Core.ViewModels.Base;
 
@@ -34,23 +37,51 @@ public abstract class BasePageTitledActionViewModel : BasePageTitledResultViewMo
     }
 
     [Reactive]
-    [Required]
     [Observe]
+    [Required(ErrorMessage = "\"Title\" should not be empty")]
     [StringLength(50, MinimumLength = 5, ErrorMessage = "\"Title\" length must be between {2}-{1} characters")]
-    [RegularExpression("[a-zA-Z]+")]
     public string Title { get; set; }
+
+    [Reactive]
+    public string TitleError { get; set; }
 
     [Reactive]
     [Observe]
     [StringLength(1000, ErrorMessage = "\"Title\" length must be less than {1} characters")]
     public string Description { get; set; }
 
+    [Reactive]
+    public string DescriptionError { get; set; }
+
     [AnyObserveChanged(ErrorMessage = "Any values should be changed.")]
     public ToDoListItemViewModel CurrentToDoList { get; set; }
 
-    public bool IsValid => Validate(this);
+    public bool IsValid => this.Validate();
 
-    public override void Prepare(ToDoListItemViewModel parameter) => _mapper.Map(parameter, this);
+    public override void Prepare(ToDoListItemViewModel parameter)
+    {
+        _mapper.Map(parameter, this);
+
+        this.WhenAnyValue(vm => vm.Title)
+            .Skip(1)
+            .Do(_ => TitleError = null)
+            .Throttle(TimeSpan.FromMilliseconds(350), RxApp.MainThreadScheduler)
+            .Select(_ => TitleError = this.Validate(nameof(Title)))
+            .WhereNotNull()
+            .Throttle(TimeSpan.FromMilliseconds(TimeConstants.WaitOnErrorDisappearing), RxApp.MainThreadScheduler)
+            .Subscribe(_ => TitleError = null)
+            .DisposeWith(CompositeDisposable);
+
+        this.WhenAnyValue(vm => vm.Description)
+            .Skip(1)
+            .Do(_ => DescriptionError = null)
+            .Throttle(TimeSpan.FromMilliseconds(350), RxApp.MainThreadScheduler)
+            .Select(_ => DescriptionError = this.Validate(nameof(Description)))
+            .WhereNotNull()
+            .Throttle(TimeSpan.FromMilliseconds(TimeConstants.WaitOnErrorDisappearing), RxApp.MainThreadScheduler)
+            .Subscribe(_ => DescriptionError = null)
+            .DisposeWith(CompositeDisposable);
+    }
 
     public override void ViewDestroy(bool viewFinishing = true)
     {
@@ -64,11 +95,4 @@ public abstract class BasePageTitledActionViewModel : BasePageTitledResultViewMo
     protected abstract void OnAfterMap(ToDoListItemDalModel toDoListItemDalModel);
 
     protected virtual ToDoListItemViewModel OnResultSet(ToDoListItemViewModel item) => item;
-
-    private static bool Validate(object @object)
-    {
-        var validationResult = new List<ValidationResult>();
-        return Validator.TryValidateObject(
-            @object, new ValidationContext(@object, null, null), validationResult, validateAllProperties: true);
-    }
 }

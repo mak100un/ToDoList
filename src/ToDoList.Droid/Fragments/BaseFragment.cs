@@ -26,14 +26,15 @@ public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel>
     {
         base.OnCreateView(inflater, container, savedInstanceState);
         var view = this.BindingInflate(ResourceId, container, false);
+        _toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.toolbar);
+        _toolbar.TitleCentered = true;
 
         if (!HasBackButton)
         {
             return view;
         }
 
-        (_toolbar = view.FindViewById<MaterialToolbar>(Resource.Id.toolbar)).NavigationClick += OnNavigationClick;
-
+        _toolbar.NavigationClick += OnNavigationClick;
         Activity?.Then(activity =>
         {
             var icon = activity.GetDrawableFromAttribute(Resource.Attribute.homeAsUpIndicator);

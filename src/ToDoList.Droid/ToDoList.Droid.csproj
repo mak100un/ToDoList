@@ -71,7 +71,7 @@
     <Compile Include="Bindings\TextViewTextColorTargetBinding.cs" />
     <Compile Include="Bindings\ViewBackgroundTargetBinding.cs" />
     <Compile Include="Definitions\Constants\BindingConstants.cs" />
-    <Compile Include="Definitions\Converters\IsNullOrEmptyConverter.cs" />
+    <Compile Include="Definitions\Converters\IsNotNullOrEmptyConverter.cs" />
     <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\ViewGroupExtensions.cs" />
     <Compile Include="Fragments\BaseFragment.cs" />

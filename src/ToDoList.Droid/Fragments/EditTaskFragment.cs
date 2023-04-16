@@ -7,6 +7,7 @@ using Google.Android.Material.RadioButton;
 using Google.Android.Material.TextField;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using ToDoList.Core.Definitions.Converters;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels;
 using ToDoList.Core.ViewModels.Extra;
@@ -64,10 +65,32 @@ public class EditTaskFragment : BaseMenuFragment<EditTaskViewModel>
             .WithConversion<IsNullOrEmptyConverter>();
 
         set
+            .Bind(titleTextInputLayout)
+            .For(v => v.Error)
+            .To(vm => vm.TitleError);
+
+        set
+            .Bind(titleTextInputLayout)
+            .For(v => v.ErrorEnabled)
+            .To(vm => vm.TitleError)
+            .WithConversion<IsNotNullOrEmptyConverter>();
+
+        set
             .Bind(descriptionTextInputLayout)
             .For(v => v.HintEnabled)
             .To(vm => vm.Description)
             .WithConversion<IsNullOrEmptyConverter>();
+
+        set
+            .Bind(descriptionTextInputLayout)
+            .For(v => v.Error)
+            .To(vm => vm.DescriptionError);
+
+        set
+            .Bind(descriptionTextInputLayout)
+            .For(v => v.ErrorEnabled)
+            .To(vm => vm.DescriptionError)
+            .WithConversion<IsNotNullOrEmptyConverter>();
 
         set.Apply();
 

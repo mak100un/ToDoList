@@ -49,7 +49,7 @@ namespace ToDoList.Droid.Views
                 return;
             }
 
-            Process.KillProcess(Process.MyPid());
+            FinishAffinity();
         }
     }
 }

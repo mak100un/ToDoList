@@ -20,12 +20,14 @@ public class RecyclerPaginationListener: RecyclerView.OnScrollListener, INotifyP
 
     public int LoadingOffset { get; set; }
 
+    public bool IsLoadingMore { get; set; }
+
     public override void OnScrolled(RecyclerView recyclerView, int dx, int dy)
     {
         base.OnScrolled(recyclerView, dx, dy);
         _onRecyclerScroll?.Invoke(dy);
 
-        if (_layoutManager.FindLastVisibleItemPosition() < LoadingOffset)
+        if (_layoutManager.FindLastVisibleItemPosition() < (IsLoadingMore ? LoadingOffset - 1 : LoadingOffset))
         {
             return;
         }

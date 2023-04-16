@@ -82,6 +82,8 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\KeyboardInsetTracker.cs" />
+    <Compile Include="Services\KeyboardObserver.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\ToDoListSource.cs" />
     <Compile Include="Styles\ColorPalette.cs" />
@@ -93,8 +95,8 @@
     <Compile Include="ViewControllers\EditTaskViewController.cs" />
     <Compile Include="ViewControllers\NewTaskViewController.cs" />
     <Compile Include="ViewControllers\ToDoListViewController.cs" />
+    <Compile Include="Views\DynamicFooterTableView.cs" />
     <Compile Include="Views\LoaderView.cs" />
-    <Compile Include="Views\NavigationBarUnderLine.cs" />
     <Compile Include="Views\PlaceholderedTextView.cs" />
     <Compile Include="Views\StateContainer.cs" />
     <Content Include="FodyWeavers.xml" />

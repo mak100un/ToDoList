@@ -1,43 +1,21 @@
 using System;
 using Cirrious.FluentLayouts.Touch;
-using CoreGraphics;
-using Foundation;
-using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.BindingContext;
-using ToDoList.Core.Definitions.Converters;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Definitions.Extensions;
 using ToDoList.Core.ViewModels.Items;
-using ToDoList.iOS.Definitions.Converters;
 using ToDoList.iOS.Styles;
 using UIKit;
 
 namespace ToDoList.iOS.Cells;
 
-public class ToDoListItemCell : UITableViewCell, IMvxBindingContextOwner
+public class ToDoListItemCell : MvxTableViewCell
 {
     public ToDoListItemCell(IntPtr intPtr)
         : base(intPtr)
     {
-        this.CreateBindingContext();
         InitCell();
-    }
-
-    public IMvxBindingContext BindingContext { get; set; }
-
-    [MvxSetToNullAfterBinding]
-    public object DataContext
-    {
-        get => BindingContext?.DataContext;
-        set
-        {
-            if (BindingContext == null)
-            {
-                return;
-            }
-
-            BindingContext.DataContext = value;
-        }
     }
 
     private void InitCell()

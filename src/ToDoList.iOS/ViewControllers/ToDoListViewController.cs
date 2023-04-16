@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Cirrious.FluentLayouts.Touch;
 using CoreGraphics;
+using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
@@ -63,8 +64,8 @@ namespace ToDoList.iOS.ViewControllers
                 // _stateContainer
                 _stateContainer.AtBottomOfSafeArea(View),
                 _stateContainer.AtTopOfSafeArea(View),
-                _stateContainer.AtLeadingOf(View),
-                _stateContainer.ToTrailingOf(View)
+                _stateContainer.AtLeftOfSafeArea(View),
+                _stateContainer.AtRightOfSafeArea(View)
             );
         }
 
@@ -76,8 +77,8 @@ namespace ToDoList.iOS.ViewControllers
                 .To(vm => vm.State)
                 .WithGenericConversion((State state) => state switch
                 {
-                    State.Default => true,
-                    _ => false
+                    State.Default => false,
+                    _ => true
                 });
 
         }
@@ -88,7 +89,7 @@ namespace ToDoList.iOS.ViewControllers
 
             UITableView CreateInnerTableView()
             {
-                _todoListTableView = new UITableView(CGRect.Empty, UITableViewStyle.Plain)
+                _todoListTableView = new DynamicFooterTableView(CGRect.Empty, UITableViewStyle.Plain)
                 {
                     ScrollsToTop = false,
                     SeparatorStyle = UITableViewCellSeparatorStyle.None,
@@ -99,10 +100,19 @@ namespace ToDoList.iOS.ViewControllers
                     TranslatesAutoresizingMaskIntoConstraints = false,
                 };
 
+                _todoListTableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 10));
+
                 _todoListTableView.RegisterClassForHeaderFooterViewReuse(typeof(LoaderView), nameof(LoaderView));
                 _todoListTableView.RegisterClassForCellReuse(typeof(ToDoListItemCell), nameof(ToDoListItemCell));
 
-                var todoListDataSource = new ToDoListSource(_todoListTableView);
+                var todoListDataSource = new ToDoListSource(_todoListTableView, () => _todoListTableView.ScrollToRow(NSIndexPath.FromRowSection(0, 0), UITableViewScrollPosition.Top, true))
+                {
+                    DeselectAutomatically = true,
+                    AddAnimation = UITableViewRowAnimation.Automatic,
+                    RemoveAnimation = UITableViewRowAnimation.Automatic,
+                    ReplaceAnimation = UITableViewRowAnimation.Automatic,
+                    UseAnimations = true,
+                };
                 _todoListTableView.Source = todoListDataSource;
 
                 var set = this.CreateBindingSet<ToDoListViewController, ToDoListViewModel>();
@@ -116,16 +126,21 @@ namespace ToDoList.iOS.ViewControllers
                     .To(vm => vm.IsLoadingMore);
 
                 set.Bind(todoListDataSource)
-                    .For(x => x.EditTaskCommand)
+                    .For(x => x.SelectionChangedCommand)
                     .To(vm => vm.EditTaskCommand);
 
                 set.Bind(todoListDataSource)
                     .For(x => x.LoadingOffset)
-                    .To(vm => ToDoListViewModel.LoadingOffset);
+                    .To(vm => vm.LoadingOffset);
 
                 set
                     .Bind(todoListDataSource)
                     .For(v => v.Items)
+                    .To(vm => vm.Items);
+
+                set
+                    .Bind(todoListDataSource)
+                    .For(v => v.ItemsSource)
                     .To(vm => vm.Items);
 
                 set.Apply();

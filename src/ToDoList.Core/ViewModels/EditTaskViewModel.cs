@@ -11,7 +11,6 @@ using ToDoList.Core.Definitions.Constants;
 using ToDoList.Core.Definitions.DalModels;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.Repositories.Interfaces;
-using ToDoList.Core.Services.Interfaces;
 using ToDoList.Core.ViewModels.Base;
 using ToDoList.Core.ViewModels.Items;
 

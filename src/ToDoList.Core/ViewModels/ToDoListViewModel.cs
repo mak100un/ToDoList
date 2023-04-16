@@ -84,7 +84,11 @@ namespace ToDoList.Core.ViewModels
 
             Items
                 .ObserveCollectionChanges()
-                .Subscribe(_ => State = Items.Count > 0 ? State.Default : State.NoData);
+                .Subscribe(_ =>
+                {
+                    State = Items.Count > 0 ? State.Default : State.NoData;
+                    LoadingOffset = Items.Count - 3;
+                });
         }
 
         [Reactive]
@@ -96,7 +100,8 @@ namespace ToDoList.Core.ViewModels
         [Reactive]
         public State State { get; private set; }
 
-        public static int LoadingOffset => 2;
+        [Reactive]
+        public int LoadingOffset { get; private set; }
 
         public ObservableCollection<ToDoListItemViewModel> Items { get; } = new();
 

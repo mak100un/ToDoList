@@ -1,17 +1,21 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using Cirrious.FluentLayouts.Touch;
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using MvvmCross;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Plugin.Visibility;
+using ToDoList.Core.Definitions.Converters;
 using ToDoList.Core.Definitions.Enums;
 using ToDoList.Core.ViewModels;
 using ToDoList.iOS.Extensions;
+using ToDoList.iOS.Services;
 using ToDoList.iOS.Styles;
 using ToDoList.iOS.Views;
 using UIKit;
@@ -36,6 +40,9 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
     private UIButton _actionButton;
     private UIView _contentView;
     private bool _moreThan11;
+    private UILabel _titleErrorLabel;
+    private UILabel _descriptionErrorLabel;
+    private KeyboardInsetTracker _keyboardInsetTracker;
 
     protected override string Image => "Delete";
     protected override Expression<Func<EditTaskViewModel, object>> NavigationItemCommandExtractor => vm => vm.DeleteCommand;
@@ -69,8 +76,9 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
             ReturnKeyType = UIReturnKeyType.Done,
         });
 
-        _titleField.AttributedPlaceholder = new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
+        _titleStack.AddArrangedSubview(_titleErrorLabel = ViewPalette.CreateTitleLabel(textColor: UIColor.Red));
 
+        _titleField.AttributedPlaceholder = new NSAttributedString(TextResources.TITLE_PLACEHOLDER, FontPalette.BodySize, ColorPalette.PlaceholderColor, UIColor.Clear);
 
         var titlePaddingView = new UIView(new CGRect(0, 0, 16, 0));
         _titleField.LeftView = titlePaddingView;
@@ -102,8 +110,10 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
             Placeholder = TextResources.DESCRIPTION_PLACEHOLDER,
             BackgroundColor = ColorPalette.InputBackgroundButton,
             ClipsToBounds = true,
-            ReturnKeyType = UIReturnKeyType.Done,
+            ReturnKeyType = UIReturnKeyType.Next,
         });
+
+        _descriptionStack.AddArrangedSubview(_descriptionErrorLabel = ViewPalette.CreateTitleLabel(textColor: UIColor.Red));
 
         if (_moreThan11)
         {
@@ -162,6 +172,17 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
 
         _scrollView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
         _contentView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+
+        _keyboardInsetTracker = Mvx.IoCProvider.IoCConstruct<KeyboardInsetTracker>(_scrollView, SetInsetAction, SetContentOffset);
+
+        void SetInsetAction(UIEdgeInsets insets) => _scrollView.ContentInset = _scrollView.ScrollIndicatorInsets = insets;
+
+        void SetContentOffset(PointF point)
+        {
+            CGPoint offset = _scrollView.ContentOffset;
+            offset.Y += point.Y;
+            _scrollView.SetContentOffset(offset, true);
+        }
     }
 
     protected override void LayoutView()
@@ -178,8 +199,8 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
             // _scrollView
             _scrollView.AtBottomOfSafeArea(View),
             _scrollView.AtTopOfSafeArea(View),
-            _scrollView.AtLeadingOf(View),
-            _scrollView.ToTrailingOf(View),
+            _scrollView.AtRightOfSafeArea(View),
+            _scrollView.AtLeftOfSafeArea(View),
 
             // _contentView
             _contentView.AtTopOf(_scrollView),
@@ -231,9 +252,31 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
             .To(vm => vm.Title);
 
         set
+            .Bind(_titleErrorLabel)
+            .For(v => v.Hidden)
+            .To(vm => vm.TitleError)
+            .WithConversion<IsNullOrEmptyConverter>();
+
+        set
+            .Bind(_titleErrorLabel)
+            .For(v => v.Text)
+            .To(vm => vm.TitleError);
+
+        set
             .Bind(_descriptionView)
             .For(v => v.Text)
             .To(vm => vm.Description);
+
+        set
+            .Bind(_descriptionErrorLabel)
+            .For(v => v.Hidden)
+            .To(vm => vm.DescriptionError)
+            .WithConversion<IsNullOrEmptyConverter>();
+
+        set
+            .Bind(_descriptionErrorLabel)
+            .For(v => v.Text)
+            .To(vm => vm.DescriptionError);
 
         set
             .Bind(_createdAtInfoLabel)
@@ -279,6 +322,15 @@ public class EditTaskViewController : BaseNavigationItemViewController<EditTaskV
 
         _titleField.AddCornerRadius(UIRectCorner.TopLeft | UIRectCorner.TopRight, 4);
         _descriptionView.AddCornerRadius(UIRectCorner.TopLeft | UIRectCorner.TopRight, 4);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _keyboardInsetTracker?.Dispose();
+        }
+        base.Dispose(disposing);
     }
 
     private static bool OnShouldReturn(UITextField textfield)

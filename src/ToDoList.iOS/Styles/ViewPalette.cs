@@ -5,10 +5,10 @@ namespace ToDoList.iOS.Styles;
 
 public static class ViewPalette
 {
-    public static UILabel CreateTitleLabel(string text = null, UITextAlignment textAlignment = UITextAlignment.Left, UIFont font = null) =>
+    public static UILabel CreateTitleLabel(string text = null, UITextAlignment textAlignment = UITextAlignment.Left, UIFont font = null, UIColor textColor = null) =>
         new()
         {
-            TextColor = ColorPalette.Accent,
+            TextColor = textColor ?? ColorPalette.Accent,
             Font = font ?? FontPalette.SecondarySize,
             Text = text,
             Lines = 1,

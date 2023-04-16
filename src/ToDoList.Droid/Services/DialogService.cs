@@ -3,6 +3,7 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Views;
+using Google.Android.Material.Snackbar;
 using MvvmCross.Platforms.Android;
 using ToDoList.Core.Services.Interfaces;
 
@@ -11,12 +12,12 @@ namespace ToDoList.Droid.Services
     public class DialogService : IDialogService
     {
         private readonly IMvxAndroidCurrentTopActivity _topActivity;
-        
+
         public DialogService(IMvxAndroidCurrentTopActivity topActivity) => _topActivity = topActivity;
-        
+
         public Task<bool> DisplayAlertAsync(string title, string message, string accept, string cancel)
         {
-            var alertDialog = new AlertDialog.Builder(_topActivity.Activity)
+            AlertDialog alertDialog = new AlertDialog.Builder(_topActivity.Activity)
                 .SetTitle(title)
                 ?.SetMessage(message)
                 ?.Create();
@@ -63,6 +64,12 @@ namespace ToDoList.Droid.Services
                 alertDialog.Dispose();
                 alertDialog = null;
             }
+        }
+
+        public void ShowSnackbar(string labelText, object param, string action = null)
+        {
+            Snackbar.Make(_topActivity.Activity, param as View, labelText, BaseTransientBottomBar.LengthLong)
+                .
         }
     }
 }

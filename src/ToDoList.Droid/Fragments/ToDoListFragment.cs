@@ -97,7 +97,12 @@ public class ToDoListFragment : BaseFragment<ToDoListViewModel>
 
                 set.Bind(scrollListener)
                     .For(x => x.LoadingOffset)
-                    .To(vm => ToDoListViewModel.LoadingOffset);
+                    .To(vm => vm.LoadingOffset);
+
+                set
+                    .Bind(scrollListener)
+                    .For(v => v.IsLoadingMore)
+                    .To(vm => vm.IsLoadingMore);
 
                 set
                     .Bind(addButton)

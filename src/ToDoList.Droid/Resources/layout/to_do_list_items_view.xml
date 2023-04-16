@@ -9,6 +9,7 @@
     <mvvmcross.droidx.recyclerview.MvxRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingVertical="10dp"
         android:id="@+id/items_recycler"/>
 
 <com.google.android.material.floatingactionbutton.FloatingActionButton

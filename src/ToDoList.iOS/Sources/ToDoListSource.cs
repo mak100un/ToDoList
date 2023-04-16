@@ -6,8 +6,10 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using CoreFoundation;
 using DynamicData.Binding;
 using Foundation;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using ReactiveUI;
 using ToDoList.Core.ViewModels.Items;
 using ToDoList.iOS.Cells;
@@ -16,14 +18,17 @@ using UIKit;
 
 namespace ToDoList.iOS.Sources;
 
-public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
+public class ToDoListSource : MvxTableViewSource, INotifyPropertyChanged
 {
     private readonly CompositeDisposable _compositeDisposable = new ();
+    private readonly Action _scrollToTop;
     private IDisposable _disposable;
 
-    public ToDoListSource(UITableView tableView)
+    public ToDoListSource(UITableView tableView, Action scrollToTop)
+        : base(tableView)
     {
-        TableView = tableView;
+        _scrollToTop = scrollToTop;
+
         this.WhenAnyValue(vm => vm.Items)
             .WhereNotNull()
             .Subscribe(_ =>
@@ -55,23 +60,16 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
             .DisposeWith(_compositeDisposable);
     }
 
-    public UITableView TableView { get; }
+    protected override UITableViewCell GetOrCreateCellFor(UITableView tableView, NSIndexPath indexPath, object item) =>
+        TableView.DequeueReusableCell(nameof(ToDoListItemCell), indexPath);
 
     public ObservableCollection<ToDoListItemViewModel> Items { get; set; }
 
     public ICommand LoadMoreCommand { get; set; }
 
-    public ICommand EditTaskCommand { get; set; }
-
     public int LoadingOffset { get; set; }
 
     public bool IsLoadingMore { get; set; }
-
-    public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-    {
-        tableView.DeselectRow(indexPath, false);
-        EditTaskCommand?.Execute(Items?.ElementAtOrDefault(indexPath.Row));
-    }
 
     public override void Scrolled(UIScrollView scrollView)
     {
@@ -85,32 +83,6 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
         LoadMoreCommand?.Execute(null);
     }
 
-    public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-    {
-        var item = Items?.ElementAtOrDefault(indexPath.Row);
-
-        if (item == null)
-        {
-            return null;
-        }
-
-        UITableViewCell cell = tableView.DequeueReusableCell(nameof(ToDoListItemCell), indexPath);
-
-        return cell switch
-        {
-            ToDoListItemCell itemCell => GetItemCell(itemCell),
-            _ => cell,
-        };
-
-        ToDoListItemCell GetItemCell(ToDoListItemCell itemCell)
-        {
-            itemCell.DataContext = item;
-            return itemCell;
-        }
-    }
-
-    public override nint RowsInSection(UITableView tableview, nint section) => Items?.Count ?? 0;
-
     protected override void Dispose(bool disposing)
     {
         if (disposing)
@@ -122,103 +94,14 @@ public class ToDoListSource : UITableViewSource, INotifyPropertyChanged
         base.Dispose(disposing);
     }
 
-    private void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+    private void OnItemsChanged(NotifyCollectionChangedEventArgs argsEventArgs)
     {
-		switch (e.Action)
-		{
-			case NotifyCollectionChangedAction.Add:
-				if (e.NewStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
-
-				InsertRows(e.NewStartingIndex, e.NewItems.Count);
-
-				break;
-
-			case NotifyCollectionChangedAction.Remove:
-				if (e.OldStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
-
-				DeleteRows(e.OldStartingIndex, e.OldItems.Count);
-
-				break;
-
-			case NotifyCollectionChangedAction.Move:
-				if (e.OldStartingIndex == -1 || e.NewStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
-
-				MoveRows(e.NewStartingIndex, e.OldStartingIndex, e.OldItems.Count);
-
-				break;
-
-			case NotifyCollectionChangedAction.Replace:
-				if (e.OldStartingIndex == -1)
-					goto case NotifyCollectionChangedAction.Reset;
-
-				ReloadRows(e.OldStartingIndex, e.OldItems.Count);
-
-				break;
-
-			case NotifyCollectionChangedAction.Reset:
-				ReloadData();
-				return;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
-    private void ReloadData() => TableView.ReloadData();
-
-    private void ReloadRows(int oldStartingIndex, int oldItemsCount)
-    {
-        TableView.BeginUpdates();
-        TableView.ReloadRows(GetPaths(oldStartingIndex, oldItemsCount), UITableViewRowAnimation.Automatic);
-        TableView.EndUpdates();
-    }
-
-    private void InsertRows(int newStartingIndex, int newItemsCount)
-    {
-        TableView.BeginUpdates();
-        TableView.InsertRows(GetPaths(newStartingIndex, newItemsCount), UITableViewRowAnimation.Automatic);
-        TableView.EndUpdates();
-    }
-
-    private void DeleteRows(int oldStartingIndex, int oldItemsCount)
-    {
-        TableView.BeginUpdates();
-        TableView.DeleteRows(GetPaths(oldStartingIndex, oldItemsCount), UITableViewRowAnimation.Automatic);
-        TableView.EndUpdates();
-    }
-
-    private void MoveRows(int newStartingIndex, int oldStartingIndex, int oldItemsCount)
-    {
-        TableView.BeginUpdates();
-        for (var i = 0; i < oldItemsCount; i++)
+        switch (argsEventArgs.NewStartingIndex == 0)
         {
-            var oldIndex = oldStartingIndex;
-            var newIndex = newStartingIndex;
-
-            if (newStartingIndex < oldStartingIndex)
-            {
-                oldIndex += i;
-                newIndex += i;
-            }
-
-            TableView.MoveRow(NSIndexPath.FromRowSection(oldIndex, 0), NSIndexPath.FromRowSection(newIndex, 0));
+            case true:
+                DispatchQueue.MainQueue.DispatchAsync(() => _scrollToTop?.Invoke());
+                break;
         }
-        TableView.EndUpdates();
-    }
-
-
-    private static NSIndexPath[] GetPaths(int index, int count)
-    {
-        var paths = new NSIndexPath[count];
-
-        for (var i = 0; i < paths.Length; i++)
-        {
-            paths[i] = NSIndexPath.FromRowSection(index + i, 0);
-        }
-
-        return paths;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

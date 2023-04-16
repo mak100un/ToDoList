@@ -15,6 +15,7 @@ namespace ToDoList.iOS
         {
             base.InitializeFirstChance(iocProvider);
             iocProvider.LazyConstructAndRegisterSingleton<IDialogService, DialogService>();
+            iocProvider.LazyConstructAndRegisterSingleton<KeyboardInsetTracker, KeyboardInsetTracker>();
         }
 
         protected override IMvxIocOptions CreateIocOptions() => new MvxIocOptions

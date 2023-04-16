@@ -30,7 +30,6 @@ public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter, INotifyPropertyCh
             .Subscribe(_ =>
             {
                 _disposable?.Dispose();
-                _disposable = null;
                 _disposable = Items
                     ?.ObserveCollectionChanges()
                     .Subscribe(args => OnItemsChanged(args.EventArgs));
@@ -46,7 +45,8 @@ public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter, INotifyPropertyCh
                     case true:
                         NotifyItemInserted(Items.Count);
                         break;
-                    default: NotifyItemRemoved(Items.Count);
+                    default:
+                        NotifyItemRemoved(Items.Count);
                         break;
                 }
             })
@@ -62,8 +62,8 @@ public class ToDoListItemRecyclerAdapter : MvxRecyclerAdapter, INotifyPropertyCh
     public override int GetItemViewType(int position) =>
         (Items.Count == position) switch
         {
-            false => Resource.Layout.loading_item,
-            _ => Resource.Layout.todo_list_item_template,
+            false => Resource.Layout.todo_list_item_template,
+            _ => Resource.Layout.loading_item,
         };
 
     public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)

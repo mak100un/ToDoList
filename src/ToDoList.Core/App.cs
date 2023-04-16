@@ -17,11 +17,6 @@ namespace ToDoList.Core
         {
             base.Initialize();
 
-            CreatableTypes()
-                .EndingWith("Service")
-                .AsInterfaces()
-                .RegisterAsLazySingleton();
-
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILiteDatabase>(() => new LiteDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DbConstants.DB_NAME)));
             Mvx.IoCProvider.RegisterSingleton(() => new Lazy<ILiteDatabase>(Mvx.IoCProvider.Resolve<ILiteDatabase>));
 
