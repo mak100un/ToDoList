@@ -63,6 +63,7 @@ public abstract class BasePageTitledActionViewModel : BasePageTitledResultViewMo
         _mapper.Map(parameter, this);
 
         this.WhenAnyValue(vm => vm.Title)
+            .ObserveOn(RxApp.MainThreadScheduler)
             .Skip(1)
             .Do(_ => TitleError = null)
             .Throttle(TimeSpan.FromMilliseconds(350), RxApp.MainThreadScheduler)
@@ -73,6 +74,7 @@ public abstract class BasePageTitledActionViewModel : BasePageTitledResultViewMo
             .DisposeWith(CompositeDisposable);
 
         this.WhenAnyValue(vm => vm.Description)
+            .ObserveOn(RxApp.MainThreadScheduler)
             .Skip(1)
             .Do(_ => DescriptionError = null)
             .Throttle(TimeSpan.FromMilliseconds(350), RxApp.MainThreadScheduler)
